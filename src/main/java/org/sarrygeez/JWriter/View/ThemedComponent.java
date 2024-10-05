@@ -1,4 +1,4 @@
-package org.sarrygeez.JWriter.Widget;
+package org.sarrygeez.JWriter.View;
 
 import org.sarrygeez.JWriter.Core.Theme;
 

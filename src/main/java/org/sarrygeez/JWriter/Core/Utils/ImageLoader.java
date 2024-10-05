@@ -1,4 +1,4 @@
-package org.sarrygeez.JWriter.Utils;
+package org.sarrygeez.JWriter.Core.Utils;
 
 import javax.swing.*;
 import java.io.IOException;
