@@ -1,20 +1,21 @@
 {
-  "name": "Default Light Theme",
-  "description": "A clean and modern light theme for improved readability.",
-  "isLightTheme": true,
+  "name": "Dark Lunar Pink Theme",
+  "description": "A stylish dark theme with lunar vibes and pink accents for a calm visual experience.",
+  "isLightTheme": false,
   "colors": {
-    "primary": "#FFFFFF",
-    "secondary": "#F7F7F7",
-    "accent": "#4CAF50",
-    "text": "#333333"
+    "primary": "#252525",
+    "secondary": "#292929",
+    "accent": "#FF66CC",
+    "text": "#EAEAEA",
+    "border": "#252525"
   },
   "editor": {
-    "background": "#FFFFFF",
-    "foreground": "#333333",
-    "caretColor": "#4CAF50",
-    "lineHighlightBackground": "#E7FCE7",
-    "lineHighlightForeground": "#4CAF50",
-    "lineCountBackground": "#F7F7F7",
-    "lineCountForeground": "#333333"
+    "background": "#1A1A1A",
+    "foreground": "#EAEAEA",
+    "caretColor": "#FF66CC",
+    "lineHighlightBackground": "#333333",
+    "lineHighlightForeground": "#FF66CC",
+    "lineCountBackground": "#292929",
+    "lineCountForeground": "#EAEAEA"
   }
 }

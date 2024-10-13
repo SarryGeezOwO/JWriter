@@ -1,13 +1,15 @@
 package org.sarrygeez.JWriter.View;
 
+import com.formdev.flatlaf.fonts.inter.FlatInterFont;
 import org.sarrygeez.JWriter.Controller.EditorController;
+import org.sarrygeez.JWriter.Core.CustomDocumentFilter;
 import org.sarrygeez.JWriter.Core.Theme;
 import org.sarrygeez.JWriter.Core.Utils.DocumentUtils;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.StyleConstants;
+import javax.swing.text.*;
 import java.awt.*;
 
 public class EditorView implements ThemedComponent{
@@ -16,6 +18,7 @@ public class EditorView implements ThemedComponent{
     private final JTextPane textEditor;
     private final JPanel lineCount;
     private int lineNumber;
+    private AttributeSet attrs;
 
     @Override
     public void applyTheme(Theme theme) {
@@ -23,9 +26,12 @@ public class EditorView implements ThemedComponent{
         lineCount.setBackground(Color.decode(theme.getEditor("lineCountBackground")));
     }
 
-    public EditorView(EditorController controller) {
+    public EditorView(EditorController controller, CustomDocumentFilter documentFilter) {
         this.controller = controller;
         textEditor = new JTextPane();
+        StyledDocument styledDocument = textEditor.getStyledDocument();
+        ((AbstractDocument) styledDocument).setDocumentFilter(documentFilter);
+
         lineCount = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -36,6 +42,13 @@ public class EditorView implements ThemedComponent{
     }
 
     public JTextPane displayTextEditor() {
+        SimpleAttributeSet as = new SimpleAttributeSet();
+        StyleConstants.setFontFamily(as, FlatInterFont.FAMILY);
+        StyleConstants.setFontSize(as, 16);
+        StyleConstants.setLineSpacing(as, 0.1f);
+        attrs = as;
+
+        textEditor.setParagraphAttributes(as, false);
         textEditor.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {update();}
@@ -65,7 +78,7 @@ public class EditorView implements ThemedComponent{
         // Calculate the height of a line accounting for line space
         FontMetrics metrics = DocumentUtils.getFontMetricsForStyledDocument(textEditor.getStyledDocument(), textEditor);
         int fontHeight = metrics.getHeight();
-        float lineSpace = StyleConstants.getLineSpacing(textEditor.getStyledDocument().getDefaultRootElement().getAttributes());
+        float lineSpace = StyleConstants.getLineSpacing(attrs);
         int lineHeight = (int)(fontHeight * (1 + lineSpace));
 
         int startOffset = textEditor.viewToModel2D(new Point(0, 0));
@@ -80,7 +93,7 @@ public class EditorView implements ThemedComponent{
             y += lineHeight;
 
             // Draw line number at current y
-            g2d.drawString(lineN, 10, y);
+            g2d.drawString(lineN, 10, y - 2);
 
         }
     }

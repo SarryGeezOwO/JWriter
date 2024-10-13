@@ -1,6 +1,5 @@
 package org.sarrygeez.JWriter.View;
 
-import net.miginfocom.swing.MigLayout;
 import org.sarrygeez.JWriter.Core.Theme;
 import org.sarrygeez.JWriter.Widget.RoundedPanel;
 
@@ -17,6 +16,8 @@ public class HeaderView extends JPanel implements ThemedComponent{
         this.setBackground(Color.decode(theme.getEditor("background")));
         noteHeader.setBackground(Color.decode(theme.getEditor("background")));
         sidebarHeader.setBackground(Color.decode(theme.getColor("accent")));
+        noteHeader.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0,
+                Color.decode(theme.getColor("border"))));
     }
 
     public HeaderView() {

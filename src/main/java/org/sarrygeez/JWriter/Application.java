@@ -26,21 +26,25 @@ public class Application {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        frame.setContentPane(new ContentPane());
+        frame.setContentPane(new ContentPane(this));
 
         frame.setIconImage(new ImageIcon("AppIcon.png").getImage());
         frame.setVisible(true);
-        themeManager.loadTheme("Default Light Theme");
+        themeManager.loadTheme("Dark Lunar Pink Theme");
+    }
+
+    public JFrame getFrame() {
+        return frame;
     }
 
     public class ContentPane extends JPanel {
 
-        ContentPane() {
+        ContentPane(Application app) {
 
             HeaderView header = new HeaderView();
             SidebarView sidebar = new SidebarView();
 
-            EditorController editorController = new EditorController();
+            EditorController editorController = new EditorController(app);
 
             themeManager.registerComponent(header);
             themeManager.registerComponent(sidebar);
@@ -53,5 +57,4 @@ public class Application {
         }
 
     }
-
 }

@@ -9,7 +9,7 @@ public class DocumentUtils {
     private DocumentUtils() {}
 
     public static FontMetrics getFontMetricsForStyledDocument(StyledDocument doc, JTextPane textPane) {
-        AttributeSet as = doc.getDefaultRootElement().getAttributes();
+        AttributeSet as = textPane.getParagraphAttributes();
 
         // Retrieve the Font from the attribute set
         String fontFamily = StyleConstants.getFontFamily(as);

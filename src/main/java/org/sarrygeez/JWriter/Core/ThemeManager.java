@@ -1,9 +1,13 @@
 package org.sarrygeez.JWriter.Core;
 
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.sarrygeez.JWriter.View.ThemedComponent;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -58,6 +62,16 @@ public class ThemeManager {
 
     public void applyTheme() {
         System.out.println(currentTheme.name);
+        try {
+            // Update Frame mode
+            UIManager.setLookAndFeel(currentTheme.isLightTheme ?
+                    new FlatMacLightLaf() : new FlatMacDarkLaf());
+            FlatLaf.updateUI();
+        } catch (UnsupportedLookAndFeelException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Update all components
         for(ThemedComponent comp : themedComponents) {
             comp.applyTheme(currentTheme);
         }
