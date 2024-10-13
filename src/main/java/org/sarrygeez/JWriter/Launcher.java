@@ -11,14 +11,12 @@ public class Launcher {
 
     private final ThemeManager themeManager = new ThemeManager();
 
-    Launcher() {
-        setupFlatLaF();
-        themeManager.loadThemeFiles("TestDir");
-
+    Launcher(String themeDir) {
+        themeManager.loadThemeFiles(themeDir);
         EventQueue.invokeLater(() -> new Application(themeManager));
     }
 
-    private void setupFlatLaF() {
+    private static void setupFlatLaF() {
         FlatInterFont.install();
         FlatMacDarkLaf.setup();
 
@@ -28,6 +26,16 @@ public class Launcher {
     }
 
     public static void main(String[] args) {
-        new Launcher();
+        setupFlatLaF();
+
+        // Don't open the app, instead show an error window
+        if(args.length != 1) {
+            JOptionPane.showMessageDialog(
+                    null, "Base directory for Themes is missing", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Open the app
+        new Launcher(args[0]);
     }
 }
