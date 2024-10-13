@@ -8,6 +8,7 @@ public class Theme {
     public String name;
     public String description;
     public boolean isLightTheme;
+    public boolean enableBorder;
     public HashMap<String, String> colors;
     public HashMap<String, String> editor;
 

@@ -13,7 +13,11 @@ public class Launcher {
 
     Launcher(String themeDir) {
         themeManager.loadThemeFiles(themeDir);
-        EventQueue.invokeLater(() -> new Application(themeManager));
+
+        // NOTE: Default themes will be stored in the resource file
+        //       For now in this case, Default theme is considered as a custom theme file
+        EventQueue.invokeLater(() ->
+                new Application(themeManager, "Default Theme"));
     }
 
     private static void setupFlatLaF() {

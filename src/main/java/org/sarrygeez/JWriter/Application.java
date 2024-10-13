@@ -1,22 +1,32 @@
 package org.sarrygeez.JWriter;
 
 import org.sarrygeez.JWriter.Controller.EditorController;
+import org.sarrygeez.JWriter.Core.Theme;
 import org.sarrygeez.JWriter.Core.ThemeManager;
 import org.sarrygeez.JWriter.View.HeaderView;
 import org.sarrygeez.JWriter.View.SidebarView;
+import org.sarrygeez.JWriter.View.ThemedComponent;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class Application {
+public class Application implements ThemedComponent {
 
     private final JFrame frame = new JFrame();
     private final Dimension startSize = new Dimension(920, 720);
     private final ThemeManager themeManager;
+    private final String initialTheme;
 
-    Application(ThemeManager themeManager) {
+    Application(ThemeManager themeManager, String initialTheme) {
         this.themeManager = themeManager;
+        this.initialTheme = initialTheme;
+        themeManager.registerComponent(this);
         initFrame();
+    }
+
+    @Override
+    public void applyTheme(Theme theme) {
+        frame.getRootPane().setBackground(Color.decode(theme.getColor("primary")));
     }
 
     private void initFrame() {
@@ -30,7 +40,7 @@ public class Application {
 
         frame.setIconImage(new ImageIcon("AppIcon.png").getImage());
         frame.setVisible(true);
-        themeManager.loadTheme("Dark Lunar Pink Theme");
+        themeManager.loadTheme(initialTheme);
     }
 
     public JFrame getFrame() {

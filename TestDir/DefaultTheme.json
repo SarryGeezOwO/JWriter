@@ -1,21 +1,23 @@
 {
-  "name": "Dark Lunar Pink Theme",
-  "description": "A stylish dark theme with lunar vibes and pink accents for a calm visual experience.",
+  "name": "Default Theme",
+  "description": "The Default Dark theme for JWriter.",
   "isLightTheme": false,
+  "enableBorder": false,
   "colors": {
-    "primary": "#252525",
-    "secondary": "#292929",
-    "accent": "#FF66CC",
-    "text": "#EAEAEA",
-    "border": "#252525"
+    "primary": "#000000",
+    "secondary": "#1A1A1A",
+    "accent": "#FFFFFF",
+    "secondaryAccent": "#CCCCCC",
+    "text": "#FFFFFF",
+    "border": "#333333"
   },
   "editor": {
-    "background": "#1A1A1A",
-    "foreground": "#EAEAEA",
-    "caretColor": "#FF66CC",
-    "lineHighlightBackground": "#333333",
-    "lineHighlightForeground": "#FF66CC",
-    "lineCountBackground": "#292929",
-    "lineCountForeground": "#EAEAEA"
+    "background": "#0C0C0C",
+    "foreground": "#FFFFFF",
+    "caretColor": "#FFFFFF",
+    "lineHighlightBackground": "#1A1A1A",
+    "lineHighlightForeground": "#FFFFFF",
+    "lineCountBackground": "#1A1A1A",
+    "lineCountForeground": "#FFFFFF"
   }
 }

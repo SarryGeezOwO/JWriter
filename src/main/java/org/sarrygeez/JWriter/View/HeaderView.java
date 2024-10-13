@@ -1,6 +1,7 @@
 package org.sarrygeez.JWriter.View;
 
 import org.sarrygeez.JWriter.Core.Theme;
+import org.sarrygeez.JWriter.Core.Utils.ComponentDecorator;
 import org.sarrygeez.JWriter.Widget.RoundedPanel;
 
 import javax.swing.*;
@@ -13,18 +14,17 @@ public class HeaderView extends JPanel implements ThemedComponent{
 
     @Override
     public void applyTheme(Theme theme) {
-        this.setBackground(Color.decode(theme.getEditor("background")));
-        noteHeader.setBackground(Color.decode(theme.getEditor("background")));
         sidebarHeader.setBackground(Color.decode(theme.getColor("accent")));
-        noteHeader.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0,
-                Color.decode(theme.getColor("border"))));
+        this.setBackground(Color.decode(theme.getColor("primary")));
+        noteHeader.setBackground(Color.decode(theme.getColor("primary")));
+        ComponentDecorator.addBorder(new Insets(0,0,1,0), noteHeader, theme);
     }
 
     public HeaderView() {
-        setPreferredSize(new Dimension(0, 120));
+        setPreferredSize(new Dimension(0, 100));
         setLayout(new BorderLayout());
 
-        sidebarHeader = new RoundedPanel(0, 60, 0, 0);
+        sidebarHeader = new RoundedPanel(0, 30, 0, 0);
         noteHeader = new JPanel();
 
         sidebarHeader.setPreferredSize(new Dimension(310, 0));

@@ -66,10 +66,13 @@ public class ThemeManager {
             // Update Frame mode
             UIManager.setLookAndFeel(currentTheme.isLightTheme ?
                     new FlatMacLightLaf() : new FlatMacDarkLaf());
-            FlatLaf.updateUI();
         } catch (UnsupportedLookAndFeelException e) {
             throw new RuntimeException(e);
         }
+
+
+
+        FlatLaf.updateUI();
 
         // Update all components
         for(ThemedComponent comp : themedComponents) {

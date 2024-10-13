@@ -1,0 +1,23 @@
+{
+  "name": "Midnight Ocean Theme",
+  "description": "A serene dark theme inspired by ocean depths, featuring cool blues and calming greys for an immersive experience.",
+  "isLightTheme": false,
+  "enableBorder": true,
+  "colors": {
+    "primary": "#0E1A24",
+    "secondary": "#1A2D4D",
+    "accent": "#1DA1F2",
+    "secondaryAccent": "#9090A1",
+    "text": "#FFFFFF",
+    "border": "#2E4A6D"
+  },
+  "editor": {
+    "background": "#0A0E14",
+    "foreground": "#E1E1E1",
+    "caretColor": "#1DA1F2",
+    "lineHighlightBackground": "#1B2631",
+    "lineHighlightForeground": "#1DA1F2",
+    "lineCountBackground": "#1A2D4D",
+    "lineCountForeground": "#E1E1E1"
+  }
+}
