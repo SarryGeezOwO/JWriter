@@ -1,8 +1,6 @@
 package org.sarrygeez.JWriter.View;
 
-import com.formdev.flatlaf.fonts.inter.FlatInterFont;
 import org.sarrygeez.JWriter.Controller.EditorController;
-import org.sarrygeez.JWriter.Core.Editor.CustomCaret;
 import org.sarrygeez.JWriter.Core.Editor.CustomDocumentFilter;
 import org.sarrygeez.JWriter.Core.Theme;
 import org.sarrygeez.JWriter.Core.Utils.DocumentUtils;
@@ -58,11 +56,21 @@ public class EditorView implements ThemedComponent{
 
     public JTextPane displayTextEditor() {
         SimpleAttributeSet as = new SimpleAttributeSet();
+        // Tabs
+        int tabSize = 40; // Set the tab size (in pixels)
+        TabStop[] tabStops = new TabStop[10];
+        for (int i = 0; i < tabStops.length; i++) {
+            tabStops[i] = new TabStop((i + 1) * tabSize);
+        }
+
+        TabSet tabSet = new TabSet(tabStops);
+        StyleConstants.setTabSet(as, tabSet);
 
         // Set Default Font ([Lexend Deca] index = 1)
         StyleConstants.setFontFamily(as, FontLoader.appFontsFamily.get(1));
         StyleConstants.setFontSize(as, 16);
-        StyleConstants.setLineSpacing(as, 0.1f);
+        //StyleConstants.setLineSpacing(as, 0.3f); // lmao
+        StyleConstants.setSpaceBelow(as, 3f);
         attrs = as;
 
         textEditor.setParagraphAttributes(as, false);
@@ -95,8 +103,8 @@ public class EditorView implements ThemedComponent{
         // Calculate the height of a line accounting for line space
         FontMetrics metrics = DocumentUtils.getFontMetricsForStyledDocument(textEditor.getStyledDocument(), textEditor);
         int fontHeight = metrics.getHeight();
-        float lineSpace = StyleConstants.getLineSpacing(attrs);
-        int lineHeight = (int)(fontHeight * (1 + lineSpace));
+        float lineSpace = StyleConstants.getSpaceBelow(attrs);
+        int lineHeight = (int)(fontHeight + (lineSpace));
 
         int startOffset = textEditor.viewToModel2D(new Point(0, 0));
         int startLine = textEditor.getDocument().getDefaultRootElement().getElementIndex(startOffset);
@@ -109,9 +117,7 @@ public class EditorView implements ThemedComponent{
             String lineN = String.format("%4s", i + 1);
             y += lineHeight;
 
-            // Draw line number at current y
-            g2d.drawString(lineN, 10, y - 2);
-
+            g2d.drawString(lineN, 10, y - lineSpace - 2);
         }
     }
 
