@@ -5,9 +5,9 @@ import org.sarrygeez.JWriter.Application;
 import org.sarrygeez.JWriter.Core.Command;
 import org.sarrygeez.JWriter.Core.Commands.Redo;
 import org.sarrygeez.JWriter.Core.Commands.Undo;
-import org.sarrygeez.JWriter.Core.CustomDocumentFilter;
-import org.sarrygeez.JWriter.Core.DocumentHistory;
-import org.sarrygeez.JWriter.Core.DocumentMemento;
+import org.sarrygeez.JWriter.Core.Editor.CustomDocumentFilter;
+import org.sarrygeez.JWriter.Core.Editor.DocumentHistory;
+import org.sarrygeez.JWriter.Core.Editor.DocumentMemento;
 import org.sarrygeez.JWriter.View.EditorView;
 
 import javax.swing.*;

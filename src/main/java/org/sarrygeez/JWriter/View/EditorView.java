@@ -2,9 +2,11 @@ package org.sarrygeez.JWriter.View;
 
 import com.formdev.flatlaf.fonts.inter.FlatInterFont;
 import org.sarrygeez.JWriter.Controller.EditorController;
-import org.sarrygeez.JWriter.Core.CustomDocumentFilter;
+import org.sarrygeez.JWriter.Core.Editor.CustomCaret;
+import org.sarrygeez.JWriter.Core.Editor.CustomDocumentFilter;
 import org.sarrygeez.JWriter.Core.Theme;
 import org.sarrygeez.JWriter.Core.Utils.DocumentUtils;
+import org.sarrygeez.JWriter.Core.Utils.FontLoader;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -20,6 +22,12 @@ public class EditorView implements ThemedComponent{
     private int lineNumber;
     private AttributeSet attrs;
 
+/*
+        TODO: Setup the caret
+              work on the shit from trello
+*/
+
+
     @Override
     public void applyTheme(Theme theme) {
         textEditor.setBackground(Color.decode(theme.getEditor("background")));
@@ -28,10 +36,17 @@ public class EditorView implements ThemedComponent{
 
     public EditorView(EditorController controller, CustomDocumentFilter documentFilter) {
         this.controller = controller;
+
+        // TextEditor Component
         textEditor = new JTextPane();
         StyledDocument styledDocument = textEditor.getStyledDocument();
         ((AbstractDocument) styledDocument).setDocumentFilter(documentFilter);
 
+        // TODO: Implement this when settings is added
+        //textEditor.setCaret(new CustomCaret());
+
+
+        // Line Count Component
         lineCount = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -43,7 +58,9 @@ public class EditorView implements ThemedComponent{
 
     public JTextPane displayTextEditor() {
         SimpleAttributeSet as = new SimpleAttributeSet();
-        StyleConstants.setFontFamily(as, FlatInterFont.FAMILY);
+
+        // Set Default Font ([Lexend Deca] index = 1)
+        StyleConstants.setFontFamily(as, FontLoader.appFontsFamily.get(1));
         StyleConstants.setFontSize(as, 16);
         StyleConstants.setLineSpacing(as, 0.1f);
         attrs = as;

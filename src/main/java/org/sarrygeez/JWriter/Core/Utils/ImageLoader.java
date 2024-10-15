@@ -1,6 +1,7 @@
 package org.sarrygeez.JWriter.Core.Utils;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -21,5 +22,10 @@ public class ImageLoader {
         catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static ImageIcon resizeImage(ImageIcon icn, int width, int height) {
+        Image img = icn.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(img);
     }
 }
