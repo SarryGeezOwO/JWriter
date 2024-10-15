@@ -1,4 +1,4 @@
-package org.sarrygeez.JWriter.Core;
+package org.sarrygeez.JWriter.Core.Editor;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;

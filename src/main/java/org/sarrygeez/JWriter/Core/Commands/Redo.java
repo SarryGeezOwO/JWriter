@@ -2,8 +2,8 @@ package org.sarrygeez.JWriter.Core.Commands;
 
 import org.sarrygeez.JWriter.Controller.EditorController;
 import org.sarrygeez.JWriter.Core.Command;
-import org.sarrygeez.JWriter.Core.DocumentHistory;
-import org.sarrygeez.JWriter.Core.DocumentMemento;
+import org.sarrygeez.JWriter.Core.Editor.DocumentHistory;
+import org.sarrygeez.JWriter.Core.Editor.DocumentMemento;
 
 import java.util.Optional;
 

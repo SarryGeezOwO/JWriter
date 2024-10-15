@@ -1,4 +1,4 @@
-package org.sarrygeez.JWriter.Core;
+package org.sarrygeez.JWriter.Core.Editor;
 
 import org.sarrygeez.JWriter.Controller.EditorController;
 
