@@ -28,7 +28,8 @@ public class HeaderView extends JPanel implements ThemedComponent{
         this.setBackground(primary);
         noteHeader.setBackground(primary);
         titleField.setBackground(primary);
-        ComponentDecorator.addBorder(new Insets(0,0,2,0), noteHeader, theme);
+
+        ComponentDecorator.addBorder(new Insets(0,0,2,0), this, theme);
     }
 
     public HeaderView() {

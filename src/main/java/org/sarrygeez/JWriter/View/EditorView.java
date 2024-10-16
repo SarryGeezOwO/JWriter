@@ -3,10 +3,12 @@ package org.sarrygeez.JWriter.View;
 import org.sarrygeez.JWriter.Controller.EditorController;
 import org.sarrygeez.JWriter.Core.Editor.CustomDocumentFilter;
 import org.sarrygeez.JWriter.Core.Theme;
+import org.sarrygeez.JWriter.Core.Utils.ComponentDecorator;
 import org.sarrygeez.JWriter.Core.Utils.DocumentUtils;
 import org.sarrygeez.JWriter.Core.Utils.FontLoader;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -30,10 +32,10 @@ public class EditorView implements ThemedComponent{
               work on the shit from trello
 */
 
-
     @Override
     public void applyTheme(Theme theme) {
         textEditor.setBackground(Color.decode(theme.getEditor("background")));
+        textEditor.setForeground(Color.decode(theme.getEditor("foreground")));
         lineCount.setBackground(Color.decode(theme.getEditor("lineCountBackground")));
 
         lineCountForeground = Color.decode(theme.getEditor("lineCountForeground"));
@@ -46,7 +48,7 @@ public class EditorView implements ThemedComponent{
 
         // TextEditor Component
         textEditor = new JTextPane();
-        textEditor.setMargin(new Insets(6, 5, 0, 5));
+        textEditor.setMargin(new Insets(5, 5, 0, 5));
         StyledDocument styledDocument = textEditor.getStyledDocument();
         ((AbstractDocument) styledDocument).setDocumentFilter(documentFilter);
 
@@ -67,7 +69,7 @@ public class EditorView implements ThemedComponent{
         StyleConstants.setSpaceBelow(as, 3f);
         attrs = as;
 
-        textEditor.setParagraphAttributes(as, true);
+        textEditor.setParagraphAttributes(as, false);
 
         // TODO: Implement this when settings is added
         //textEditor.setCaret(new CustomCaret());
