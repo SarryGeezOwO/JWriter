@@ -2,6 +2,7 @@ package org.sarrygeez.JWriter;
 
 import org.sarrygeez.JWriter.Controller.EditorController;
 import org.sarrygeez.JWriter.Controller.HeaderController;
+import org.sarrygeez.JWriter.Controller.TitleBarMenuController;
 import org.sarrygeez.JWriter.Core.Theme;
 import org.sarrygeez.JWriter.Core.ThemeManager;
 import org.sarrygeez.JWriter.View.SidebarView;
@@ -10,10 +11,12 @@ import org.sarrygeez.JWriter.View.ThemedComponent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Application implements ThemedComponent {
 
-    private final JFrame frame = new JFrame();
+    private static final JFrame frame = new JFrame();
     private final Dimension startSize = new Dimension(920, 720);
     private final ThemeManager themeManager;
     private final String initialTheme;
@@ -23,11 +26,23 @@ public class Application implements ThemedComponent {
         this.initialTheme = initialTheme;
         themeManager.registerComponent(this);
         initFrame();
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                super.windowClosed(e);
+                // Do shit before closing app
+            }
+        });
     }
 
     @Override
     public void applyTheme(Theme theme) {
         frame.getRootPane().setBackground(Color.decode(theme.getColor("primary")));
+    }
+
+    public static void CloseAPP() {
+        frame.dispose();
     }
 
     private void initFrame() {
@@ -36,7 +51,6 @@ public class Application implements ThemedComponent {
         frame.setMinimumSize(new Dimension(400, 300));
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         frame.setContentPane(new ContentPane(this));
 
         frame.setIconImage(new ImageIcon("AppIcon.png").getImage());
@@ -52,7 +66,7 @@ public class Application implements ThemedComponent {
         return this;
     }
 
-    public JFrame getFrame() {
+    public static JFrame getFrame() {
         return frame;
     }
 
@@ -61,8 +75,9 @@ public class Application implements ThemedComponent {
         ContentPane(Application app) {
             SidebarView sidebar = new SidebarView();
 
-            EditorController editorController = new EditorController(app);
+            EditorController editorController = new EditorController();
             HeaderController headerController = new HeaderController(app);
+            TitleBarMenuController titleBarMenuController = new TitleBarMenuController(editorController);
             StatusBarView statusBar = new StatusBarView(editorController, headerController);
             editorController.setStatusBar(statusBar);
 
@@ -73,6 +88,9 @@ public class Application implements ThemedComponent {
 
             themeManager.registerComponent(statusBar.getLineCol());
             themeManager.registerComponent(statusBar.getEditMode());
+
+            themeManager.registerComponent(titleBarMenuController.getView());
+            frame.setJMenuBar(titleBarMenuController.getView());
 
             setLayout(new BorderLayout());
             add(sidebar, BorderLayout.WEST);

@@ -94,12 +94,12 @@ public class ThemeManager {
             throw new RuntimeException(e);
         }
 
-        FlatLaf.updateUI();
-
         // Update all components
         for(ThemedComponent comp : themedComponents) {
             comp.applyTheme(currentTheme);
         }
+
+        FlatLaf.updateUI();
     }
 
     public void registerComponent(ThemedComponent component) {

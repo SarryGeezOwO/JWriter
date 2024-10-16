@@ -1,23 +1,23 @@
 {
-  "name": "Midnight Ocean Theme",
-  "description": "A serene dark theme inspired by ocean depths, featuring cool blues and calming greys for an immersive experience.",
+  "name": "Lunar Pink Theme",
+  "description": "A lunar pink inspired dark theme for JWriter.",
   "isLightTheme": false,
   "enableBorder": true,
   "colors": {
-    "primary": "#0E1A24",
-    "secondary": "#1A2D4D",
-    "accent": "#1DA1F2",
-    "secondaryAccent": "#9090A1",
-    "text": "#FFFFFF",
-    "border": "#2E4A6D"
+    "primary": "#2E1E33",
+    "secondary": "#F0E5F5",
+    "accent": "#3A1F4A",
+    "accentText": "#DA70D6",
+    "text": "#FFC0CB",
+    "border": "#4B2A55"
   },
   "editor": {
-    "background": "#0A0E14",
-    "foreground": "#E1E1E1",
-    "caretColor": "#1DA1F2",
-    "lineHighlightBackground": "#1B2631",
-    "lineHighlightForeground": "#1DA1F2",
-    "lineCountBackground": "#1A2D4D",
-    "lineCountForeground": "#E1E1E1"
+    "background": "#3A1F4A",
+    "foreground": "#FFC0CB",
+    "caretColor": "#FF69B4",
+    "lineHighlightBackground": "#4A2A5A",
+    "lineHighlightForeground": "#FFB6C1",
+    "lineCountBackground": "#341A42",
+    "lineCountForeground": "#E6A5C7"
   }
 }

@@ -24,17 +24,15 @@ public class EditorController {
 
     private StatusBarView statusBar;
     private final EditorView view;
-    private final Application app;
 
     private final JComponent lineCount;
     private final JTextPane textEditor;
     private final CustomDocumentFilter documentFilter;
     private final HashMap<String, Command> commandMap = new HashMap<>();
 
-    public EditorController(Application app) {
+    public EditorController() {
         DocumentHistory history = new DocumentHistory(this);
         this.documentFilter = new CustomDocumentFilter(history);
-        this.app = app;
 
         // Setup UI components
         // EditorView is the combination of the LineCount and the actual textEditor
@@ -103,8 +101,8 @@ public class EditorController {
                 "control Y", "redo"
         );
 
-        InputMap inputMap = app.getFrame().getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        ActionMap actionMap = app.getFrame().getRootPane().getActionMap();
+        InputMap inputMap = Application.getFrame().getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = Application.getFrame().getRootPane().getActionMap();
 
         keyBindings.forEach((keyStroke, actionKey) -> {
             inputMap.put(KeyStroke.getKeyStroke(keyStroke), actionKey);
@@ -121,7 +119,7 @@ public class EditorController {
         });
     }
 
-    private void executeCommand(String commandKey) {
+    public void executeCommand(String commandKey) {
         Command command = commandMap.get(commandKey);
         if(command != null) {
             command.execute();
