@@ -19,6 +19,10 @@ public class Redo implements Command {
 
     @Override
     public void execute() {
+        if(!controller.isEditable()) {
+            return;
+        }
+
         Optional<DocumentMemento> memento = history.getRedoState();
         memento.ifPresent(controller::setDocumentMemento);
     }

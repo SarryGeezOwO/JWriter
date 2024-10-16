@@ -9,9 +9,12 @@ import org.sarrygeez.JWriter.Core.Editor.CustomDocumentFilter;
 import org.sarrygeez.JWriter.Core.Editor.DocumentHistory;
 import org.sarrygeez.JWriter.Core.Editor.DocumentMemento;
 import org.sarrygeez.JWriter.View.EditorView;
+import org.sarrygeez.JWriter.View.StatusBarView;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.Element;
+import javax.swing.text.StyledDocument;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -19,6 +22,7 @@ import java.util.Map;
 
 public class EditorController {
 
+    private StatusBarView statusBar;
     private final EditorView view;
     private final Application app;
 
@@ -45,6 +49,14 @@ public class EditorController {
         commandMap.put("redo", new Redo(history, this));
     }
 
+    public void setStatusBar(StatusBarView statusBar) {
+        this.statusBar = statusBar;
+    }
+
+    public StatusBarView getStatusBar() {
+        return statusBar;
+    }
+
     public EditorView getView() {
         return view;
     }
@@ -61,6 +73,28 @@ public class EditorController {
         scroll.getHorizontalScrollBar().setUnitIncrement(15);
         scroll.getVerticalScrollBar().setUnitIncrement(15);
         return scroll;
+    }
+
+    public void setEditable(boolean flag) {
+        textEditor.setEditable(flag);
+    }
+
+    public boolean isEditable() {
+        return textEditor.isEditable();
+    }
+
+    public int getOffsetFromLine(int line) {
+        if(line == 0) return 0;
+
+        StyledDocument doc = textEditor.getStyledDocument();
+        Element root = doc.getDefaultRootElement();
+
+        if(line < 1 || line > root.getElementCount()) {
+            return -1;
+        }
+
+        Element lineElement = root.getElement(line);
+        return lineElement.getStartOffset();
     }
 
     private void setupKeyBinds() {

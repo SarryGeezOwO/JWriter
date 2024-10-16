@@ -5,6 +5,7 @@ import org.sarrygeez.JWriter.Controller.HeaderController;
 import org.sarrygeez.JWriter.Core.Theme;
 import org.sarrygeez.JWriter.Core.ThemeManager;
 import org.sarrygeez.JWriter.View.SidebarView;
+import org.sarrygeez.JWriter.View.StatusBarView;
 import org.sarrygeez.JWriter.View.ThemedComponent;
 
 import javax.swing.*;
@@ -43,6 +44,14 @@ public class Application implements ThemedComponent {
         themeManager.loadTheme(initialTheme);
     }
 
+    public ThemeManager getThemeManager() {
+        return themeManager;
+    }
+
+    public Application getThis() {
+        return this;
+    }
+
     public JFrame getFrame() {
         return frame;
     }
@@ -54,13 +63,20 @@ public class Application implements ThemedComponent {
 
             EditorController editorController = new EditorController(app);
             HeaderController headerController = new HeaderController(app);
+            StatusBarView statusBar = new StatusBarView(editorController, headerController);
+            editorController.setStatusBar(statusBar);
 
             themeManager.registerComponent(sidebar);
+            themeManager.registerComponent(statusBar);
             themeManager.registerComponent(headerController.getView());
             themeManager.registerComponent(editorController.getView());
 
+            themeManager.registerComponent(statusBar.getLineCol());
+            themeManager.registerComponent(statusBar.getEditMode());
+
             setLayout(new BorderLayout());
             add(sidebar, BorderLayout.WEST);
+            add(statusBar, BorderLayout.SOUTH);
             add(headerController.getView(), BorderLayout.NORTH);
             add(editorController.display(), BorderLayout.CENTER);
         }

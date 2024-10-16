@@ -11,6 +11,11 @@ public class HeaderController {
     public HeaderController(Application app) {
         this.view = new HeaderView();
         this.app = app;
+        app.getThemeManager().registerComponent(view.getDateCreated());
+    }
+
+    public void setEditable(boolean flag) {
+        view.getTitleField().setEditable(flag);
     }
 
     public HeaderView getView() {

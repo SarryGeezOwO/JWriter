@@ -3,12 +3,10 @@ package org.sarrygeez.JWriter.View;
 import org.sarrygeez.JWriter.Controller.EditorController;
 import org.sarrygeez.JWriter.Core.Editor.CustomDocumentFilter;
 import org.sarrygeez.JWriter.Core.Theme;
-import org.sarrygeez.JWriter.Core.Utils.ComponentDecorator;
 import org.sarrygeez.JWriter.Core.Utils.DocumentUtils;
 import org.sarrygeez.JWriter.Core.Utils.FontLoader;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -93,6 +91,8 @@ public class EditorView implements ThemedComponent{
             lineNumber = textEditor.getDocument().getDefaultRootElement().getElementIndex(offset);
             lineCount.repaint();
             lineCount.revalidate();
+            int col = offset - controller.getOffsetFromLine(lineNumber);
+            controller.getStatusBar().setLineStatus(lineNumber+1, col);
         });
         return textEditor;
     }

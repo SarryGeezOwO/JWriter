@@ -7,6 +7,7 @@ import org.sarrygeez.JWriter.Core.Utils.ComponentDecorator;
 import org.sarrygeez.JWriter.Core.Utils.FontLoader;
 import org.sarrygeez.JWriter.Core.Utils.ImageLoader;
 import org.sarrygeez.JWriter.Widget.RoundedPanel;
+import org.sarrygeez.JWriter.Widget.TextView;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -18,7 +19,7 @@ public class HeaderView extends JPanel implements ThemedComponent{
     private final JPanel noteHeader;
 
     private final JTextField titleField = new JTextField();
-    private final JLabel dateCreated = new JLabel();
+    private final TextView dateCreated = new TextView(true);
 
     @Override
     public void applyTheme(Theme theme) {
@@ -54,7 +55,7 @@ public class HeaderView extends JPanel implements ThemedComponent{
     private void initTitleField() {
         titleField.setBorder(new EmptyBorder(10, 0, 10, 0));
         titleField.setFont(new Font(
-                FontLoader.appFontsFamily.get(1), Font.BOLD, 20));
+                FontLoader.appFontsFamily.get(1), Font.BOLD, 24));
 
         titleField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Title...");
         titleField.addActionListener(e -> {
@@ -65,13 +66,14 @@ public class HeaderView extends JPanel implements ThemedComponent{
 
     private void initDateCreated() {
         dateCreated.setText("October, 26, 2024");
+        dateCreated.setFontSize(16);
     }
 
     public JTextField getTitleField() {
         return titleField;
     }
 
-    public JLabel getDateCreated() {
+    public TextView getDateCreated() {
         return dateCreated;
     }
 }

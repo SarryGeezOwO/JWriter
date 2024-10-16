@@ -19,8 +19,7 @@ public class Launcher {
         FontLoader.loadCustomFont(baseDir);
         FontLoader.loadAppFonts();
 
-        // NOTE: Default themes will be stored in the resource file
-        //       For now in this case, Default theme is considered as a custom theme file
+        // Default themes are stored in the resource directory
         EventQueue.invokeLater(() ->
                 new Application(themeManager, "Default Dark Theme"));
     }

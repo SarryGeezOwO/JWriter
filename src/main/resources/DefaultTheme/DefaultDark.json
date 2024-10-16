@@ -7,7 +7,7 @@
     "primary": "#252529",
     "secondary": "#e8e8e8",
     "accent": "#1A1A1A",
-    "secondaryAccent": "#3C3C3C",
+    "accentText": "#454545",
     "text": "#FFFFFF",
     "border": "#303030"
   },

@@ -19,6 +19,10 @@ public class Undo implements Command {
 
     @Override
     public void execute() {
+        if(!controller.isEditable()) {
+            return;
+        }
+
         Optional<DocumentMemento> memento = history.getUndoState();
         memento.ifPresent(controller::setDocumentMemento);
     }

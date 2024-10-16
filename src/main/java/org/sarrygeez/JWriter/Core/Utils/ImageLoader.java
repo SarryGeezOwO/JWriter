@@ -9,6 +9,7 @@ public class ImageLoader {
     private ImageLoader(){}
 
     public static ImageIcon loadImage(String image, boolean isLight) {
+        ImageIcon icn;
         try {
             InputStream stream = ImageLoader.class.getResourceAsStream(
                     "/Icons/"+image+"-"+ ((isLight) ? "Light":"Dark") + ".png");
@@ -16,12 +17,13 @@ public class ImageLoader {
             if (stream == null)
                 throw new RuntimeException("Icon not found");
 
+            icn = new ImageIcon(stream.readAllBytes());
             stream.close();
-            return new ImageIcon(stream.readAllBytes());
         }
         catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return icn;
     }
 
     public static ImageIcon resizeImage(ImageIcon icn, int width, int height) {
