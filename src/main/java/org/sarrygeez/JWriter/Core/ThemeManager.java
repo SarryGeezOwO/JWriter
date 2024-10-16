@@ -8,10 +8,7 @@ import com.google.gson.reflect.TypeToken;
 import org.sarrygeez.JWriter.View.ThemedComponent;
 
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +20,33 @@ public class ThemeManager {
     private Theme currentTheme;
     private final List<ThemedComponent> themedComponents = new ArrayList<>();
     private final HashMap<String, Theme> availableThemes = new HashMap<>();
+    private final String[] resourceThemes = {
+            "DefaultDark.json", "DefaultLight.json"
+    };
+
+    public void loadResourceThemeFiles() {
+        Gson gson = new Gson();
+        try {
+            for(String theme : resourceThemes) {
+                InputStream is = ThemeManager.class.getResourceAsStream("/DefaultTheme/" + theme);
+                if (is == null) {
+                    throw new RuntimeException("Theme file not found: {"+ theme +"}.");
+                }
+
+                String json = new String(is.readAllBytes());
+
+                // Add The theme to the map
+                Type type = new TypeToken<Theme>(){}.getType();
+                Theme material = gson.fromJson(json, type);
+                availableThemes.put(material.name, material);
+
+                is.close();
+            }
+        }
+        catch (IOException  e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void loadThemeFiles(String baseDir) {
         Gson gson = new Gson();
@@ -61,7 +85,7 @@ public class ThemeManager {
     }
 
     public void applyTheme() {
-        System.out.println(currentTheme.name);
+        System.out.println(getCurrentTheme().name);
         try {
             // Update Frame mode
             UIManager.setLookAndFeel(currentTheme.isLightTheme ?
@@ -69,8 +93,6 @@ public class ThemeManager {
         } catch (UnsupportedLookAndFeelException e) {
             throw new RuntimeException(e);
         }
-
-
 
         FlatLaf.updateUI();
 

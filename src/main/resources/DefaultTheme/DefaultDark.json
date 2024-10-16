@@ -1,0 +1,23 @@
+{
+  "name": "Default Dark Theme",
+  "description": "The Default Light theme for JWriter.",
+  "isLightTheme": false,
+  "enableBorder": false,
+  "colors": {
+    "primary": "#FF0000",
+    "secondary": "#1A1A1A",
+    "accent": "#252529",
+    "secondaryAccent": "#CCCCCC",
+    "text": "#FFFFFF",
+    "border": "#dadada"
+  },
+  "editor": {
+    "background": "#FFFFFF",
+    "foreground": "#000000",
+    "caretColor": "#FFFFFF",
+    "lineHighlightBackground": "#e6e6e6",
+    "lineHighlightForeground": "#35353F",
+    "lineCountBackground": "#F2F2F2",
+    "lineCountForeground": "#a1a1a1"
+  }
+}

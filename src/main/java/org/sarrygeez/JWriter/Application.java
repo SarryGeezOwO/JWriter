@@ -1,9 +1,9 @@
 package org.sarrygeez.JWriter;
 
 import org.sarrygeez.JWriter.Controller.EditorController;
+import org.sarrygeez.JWriter.Controller.HeaderController;
 import org.sarrygeez.JWriter.Core.Theme;
 import org.sarrygeez.JWriter.Core.ThemeManager;
-import org.sarrygeez.JWriter.View.HeaderView;
 import org.sarrygeez.JWriter.View.SidebarView;
 import org.sarrygeez.JWriter.View.ThemedComponent;
 
@@ -50,19 +50,18 @@ public class Application implements ThemedComponent {
     public class ContentPane extends JPanel {
 
         ContentPane(Application app) {
-
-            HeaderView header = new HeaderView();
             SidebarView sidebar = new SidebarView();
 
             EditorController editorController = new EditorController(app);
+            HeaderController headerController = new HeaderController(app);
 
-            themeManager.registerComponent(header);
             themeManager.registerComponent(sidebar);
+            themeManager.registerComponent(headerController.getView());
             themeManager.registerComponent(editorController.getView());
 
             setLayout(new BorderLayout());
-            add(header, BorderLayout.NORTH);
             add(sidebar, BorderLayout.WEST);
+            add(headerController.getView(), BorderLayout.NORTH);
             add(editorController.display(), BorderLayout.CENTER);
         }
 

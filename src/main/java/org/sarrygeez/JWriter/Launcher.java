@@ -1,6 +1,7 @@
 package org.sarrygeez.JWriter;
 
 import com.formdev.flatlaf.fonts.inter.FlatInterFont;
+import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import org.sarrygeez.JWriter.Core.ThemeManager;
 import org.sarrygeez.JWriter.Core.Utils.FontLoader;
@@ -14,17 +15,19 @@ public class Launcher {
 
     Launcher(String baseDir) {
         themeManager.loadThemeFiles(baseDir + "/themes");
+        themeManager.loadResourceThemeFiles();
         FontLoader.loadCustomFont(baseDir);
         FontLoader.loadAppFonts();
 
         // NOTE: Default themes will be stored in the resource file
         //       For now in this case, Default theme is considered as a custom theme file
         EventQueue.invokeLater(() ->
-                new Application(themeManager, "Default Theme"));
+                new Application(themeManager, "Default Dark Theme"));
     }
 
     private static void setupFlatLaF() {
         FlatInterFont.install();
+        FlatJetBrainsMonoFont.install();
         FlatMacDarkLaf.setup();
 
         UIManager.put("defaultFont", new Font(FlatInterFont.FAMILY, Font.PLAIN, 13));
