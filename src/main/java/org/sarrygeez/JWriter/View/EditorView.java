@@ -78,8 +78,8 @@ public class EditorView implements ThemedComponent{
 
         // Set Default Font ([Lexend Deca] index = 1)
         StyleConstants.setFontFamily(as, FontLoader.appFontsFamily.get(1));
-        StyleConstants.setFontSize(as, 24);
-        StyleConstants.setSpaceBelow(as, 30f);
+        StyleConstants.setFontSize(as, 16);
+        StyleConstants.setSpaceBelow(as, 3f);
         attrs = as;
 
         textEditor.setParagraphAttributes(as, false);
