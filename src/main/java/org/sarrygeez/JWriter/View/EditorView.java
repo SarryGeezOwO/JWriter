@@ -22,6 +22,7 @@ public class EditorView implements ThemedComponent{
     private Color lineCountForeground;
     private Color lineHighlightColor;
     private Color lineHighlightForeground;
+    private Color editorBackgroundCol;
 
     private float lineSpace;
     private int lineHeight;
@@ -32,7 +33,7 @@ public class EditorView implements ThemedComponent{
 
     @Override
     public void applyTheme(Theme theme) {
-        textEditor.setBackground(Color.decode(theme.getEditor("background")));
+        editorBackgroundCol = (Color.decode(theme.getEditor("background")));
         textEditor.setForeground(Color.decode(theme.getEditor("foreground")));
         lineCount.setBackground(Color.decode(theme.getEditor("lineCountBackground")));
 
@@ -45,7 +46,21 @@ public class EditorView implements ThemedComponent{
         this.controller = controller;
 
         // TextEditor Component
-        textEditor = new JTextPane();
+        textEditor = new JTextPane() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2d = (Graphics2D)g.create();
+
+                // Paint the background first
+                g2d.setColor(editorBackgroundCol);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+
+                // Only paint the highlight after the BG but before the text
+                controller.getHighlighter().paintComponent(g2d);
+                super.paintComponent(g2d);
+            }
+        };
+        textEditor.setOpaque(false);
         textEditor.setMargin(new Insets(5, 5, 0, 5));
         StyledDocument styledDocument = textEditor.getStyledDocument();
         ((AbstractDocument) styledDocument).setDocumentFilter(documentFilter);
@@ -63,8 +78,8 @@ public class EditorView implements ThemedComponent{
 
         // Set Default Font ([Lexend Deca] index = 1)
         StyleConstants.setFontFamily(as, FontLoader.appFontsFamily.get(1));
-        StyleConstants.setFontSize(as, 16);
-        StyleConstants.setSpaceBelow(as, 3f);
+        StyleConstants.setFontSize(as, 24);
+        StyleConstants.setSpaceBelow(as, 30f);
         attrs = as;
 
         textEditor.setParagraphAttributes(as, false);

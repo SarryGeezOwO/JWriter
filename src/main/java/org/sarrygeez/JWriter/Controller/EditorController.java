@@ -8,6 +8,7 @@ import org.sarrygeez.JWriter.Core.Commands.Undo;
 import org.sarrygeez.JWriter.Core.Editor.CustomDocumentFilter;
 import org.sarrygeez.JWriter.Core.Editor.DocumentHistory;
 import org.sarrygeez.JWriter.Core.Editor.DocumentMemento;
+import org.sarrygeez.JWriter.View.DocumentHighlighter;
 import org.sarrygeez.JWriter.View.EditorView;
 import org.sarrygeez.JWriter.View.StatusBarView;
 
@@ -29,8 +30,9 @@ public class EditorController {
     private final JTextPane textEditor;
     private final CustomDocumentFilter documentFilter;
     private final HashMap<String, Command> commandMap = new HashMap<>();
+    private final DocumentHighlighter highlighter;
 
-    public EditorController() {
+    public EditorController(Application app) {
         DocumentHistory history = new DocumentHistory(this);
         this.documentFilter = new CustomDocumentFilter(history);
 
@@ -40,11 +42,19 @@ public class EditorController {
         lineCount = view.displayLineCount();
         textEditor = view.displayTextEditor();
 
+        // Highlighter setup
+        this.highlighter = new DocumentHighlighter(textEditor);
+        app.getThemeManager().registerComponent(this.highlighter);
+
         setupKeyBinds();
 
         // Initiate CommandMap
         commandMap.put("undo", new Undo(history, this));
         commandMap.put("redo", new Redo(history, this));
+    }
+
+    public DocumentHighlighter getHighlighter() {
+        return highlighter;
     }
 
     public void setStatusBar(StatusBarView statusBar) {
@@ -77,6 +87,7 @@ public class EditorController {
         textEditor.setEditable(flag);
     }
 
+    @SuppressWarnings("all")
     public boolean isEditable() {
         return textEditor.isEditable();
     }

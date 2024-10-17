@@ -75,7 +75,7 @@ public class Application implements ThemedComponent {
         ContentPane(Application app) {
             SidebarView sidebar = new SidebarView();
 
-            EditorController editorController = new EditorController();
+            EditorController editorController = new EditorController(app);
             HeaderController headerController = new HeaderController(app);
             TitleBarMenuController titleBarMenuController = new TitleBarMenuController(editorController);
             StatusBarView statusBar = new StatusBarView(editorController, headerController);

@@ -15,6 +15,7 @@
     "background": "#FFFFFF",
     "foreground": "#000000",
     "caretColor": "#FFFFFF",
+    "highlight" : "#FFFF00",
     "lineHighlightBackground": "#e6e6e6",
     "lineHighlightForeground": "#35353F",
     "lineCountBackground": "#F2F2F2",

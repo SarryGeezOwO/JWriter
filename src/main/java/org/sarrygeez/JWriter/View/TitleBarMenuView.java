@@ -13,7 +13,6 @@ public class TitleBarMenuView extends JMenuBar implements ThemedComponent {
 
     private final ArrayList<JMenu> menuList = new ArrayList<>();
     private final ArrayList<JMenuItem> itemList = new ArrayList<>();
-    private final TitleBarMenuController controller;
 
     @Override
     public void applyTheme(Theme theme) {
@@ -33,7 +32,6 @@ public class TitleBarMenuView extends JMenuBar implements ThemedComponent {
     }
 
     public TitleBarMenuView(TitleBarMenuController controller) {
-        this.controller = controller;
         addMenu("File");
         addMenu("Edit");
         addMenu("View");
