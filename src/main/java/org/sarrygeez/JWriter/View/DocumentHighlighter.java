@@ -47,10 +47,8 @@ public class DocumentHighlighter implements ThemedComponent{
     }
 
     private void triggerCheck() {
-        SwingUtilities.invokeLater(() -> {
-            checkForBackticks();
-            textPane.repaint();
-        });
+        checkForBackticks();
+        textPane.repaint();
     }
 
     private void checkForBackticks() {
