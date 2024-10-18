@@ -26,7 +26,7 @@ public class StatusBarView extends JPanel implements ThemedComponent {
     @Override
     public void applyTheme(Theme theme) {
         setBackground(Color.decode(theme.getColor("primary")));
-        ComponentDecorator.addBorder(new Insets(2,0,0,0), this, theme);
+        ComponentDecorator.addBorder(new Insets(1,0,0,0), this, theme);
     }
 
     public StatusBarView(EditorController editor, HeaderController header) {

@@ -11,7 +11,7 @@ public class SidebarView extends JPanel implements ThemedComponent {
     @Override
     public void applyTheme(Theme theme) {
         setBackground(Color.decode(theme.getColor("primary")));
-        ComponentDecorator.addBorder(new Insets(0,0,0,2), this, theme);
+        ComponentDecorator.addBorder(new Insets(1,0,0,1), this, theme);
     }
 
     public SidebarView() {

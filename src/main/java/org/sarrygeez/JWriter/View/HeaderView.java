@@ -2,10 +2,9 @@ package org.sarrygeez.JWriter.View;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
+import org.sarrygeez.JWriter.Controller.HeaderController;
 import org.sarrygeez.JWriter.Core.Theme;
-import org.sarrygeez.JWriter.Core.Utils.ComponentDecorator;
 import org.sarrygeez.JWriter.Core.Utils.FontLoader;
-import org.sarrygeez.JWriter.Core.Utils.ImageLoader;
 import org.sarrygeez.JWriter.Widget.RoundedPanel;
 import org.sarrygeez.JWriter.Widget.TextView;
 
@@ -20,6 +19,7 @@ public class HeaderView extends JPanel implements ThemedComponent{
 
     private final JTextField titleField = new JTextField();
     private final TextView dateCreated = new TextView(true);
+    private final HeaderController controller;
 
     @Override
     public void applyTheme(Theme theme) {
@@ -29,11 +29,10 @@ public class HeaderView extends JPanel implements ThemedComponent{
         this.setBackground(primary);
         noteHeader.setBackground(primary);
         titleField.setBackground(primary);
-
-        ComponentDecorator.addBorder(new Insets(0,0,2,0), this, theme);
     }
 
-    public HeaderView() {
+    public HeaderView(HeaderController controller) {
+        this.controller = controller;
         setPreferredSize(new Dimension(0, 100));
         setLayout(new BorderLayout());
 
@@ -58,10 +57,7 @@ public class HeaderView extends JPanel implements ThemedComponent{
                 FontLoader.appFontsFamily.get(1), Font.BOLD, 24));
 
         titleField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Title...");
-        titleField.addActionListener(e -> {
-            titleField.transferFocus();
-            // Save changes to disc???
-        });
+        titleField.addActionListener(e -> controller.transferFocus());
     }
 
     private void initDateCreated() {
