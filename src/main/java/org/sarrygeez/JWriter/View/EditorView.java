@@ -55,6 +55,9 @@ public class EditorView implements ThemedComponent{
                 g2d.setColor(editorBackgroundCol);
                 g2d.fillRect(0, 0, getWidth(), getHeight());
 
+                // Not sure, to draw line highlight
+                //drawLineHighlight(g2d, this); // Line Highlight
+
                 // Only paint the highlight after the BG but before the text
                 controller.getHighlighter().paintComponent(g2d);
                 super.paintComponent(g2d);
@@ -87,7 +90,6 @@ public class EditorView implements ThemedComponent{
         // TODO: Implement this when settings is added
         //textEditor.setCaret(new CustomCaret());
 
-
         // Line Count Component
         lineCount = new JPanel() {
             @Override
@@ -104,10 +106,11 @@ public class EditorView implements ThemedComponent{
         textEditor.addCaretListener(e -> {
             int offset = textEditor.getCaretPosition();
             lineNumber = textEditor.getDocument().getDefaultRootElement().getElementIndex(offset);
-            lineCount.repaint();
-            lineCount.revalidate();
             int col = offset - controller.getOffsetFromLine(lineNumber);
             controller.getStatusBar().setLineStatus(lineNumber+1, col);
+
+            textEditor.repaint();
+            lineCount.repaint();
         });
         return textEditor;
     }
@@ -134,7 +137,7 @@ public class EditorView implements ThemedComponent{
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2d.setFont(new Font(FontLoader.appFontsFamily.get(1), Font.PLAIN, 13));
 
-        drawHighlight(g2d, lineCount);
+        drawLineHighlight(g2d, lineCount);
 
         // Draw number lines after the highlight, so it doesn't get affected by the highlight color
         for(int i = startLine; y < DocumentUtils.getTotalLineCount(textEditor) * lineHeight; i++) {
@@ -146,7 +149,7 @@ public class EditorView implements ThemedComponent{
         }
     }
 
-    private void drawHighlight(Graphics g, JComponent source) {
+    private void drawLineHighlight(Graphics g, JComponent source) {
         g.setColor(lineHighlightColor);
         try {
             int startOffset = textEditor.getDocument().getDefaultRootElement()

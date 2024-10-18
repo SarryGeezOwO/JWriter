@@ -76,7 +76,7 @@ public class Application implements ThemedComponent {
             SidebarView sidebar = new SidebarView();
 
             EditorController editorController = new EditorController(app);
-            HeaderController headerController = new HeaderController(app);
+            HeaderController headerController = new HeaderController(app, editorController);
             TitleBarMenuController titleBarMenuController = new TitleBarMenuController(editorController);
             StatusBarView statusBar = new StatusBarView(editorController, headerController);
             editorController.setStatusBar(statusBar);

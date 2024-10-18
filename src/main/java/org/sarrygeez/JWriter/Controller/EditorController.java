@@ -11,11 +11,13 @@ import org.sarrygeez.JWriter.Core.Editor.DocumentMemento;
 import org.sarrygeez.JWriter.View.DocumentHighlighter;
 import org.sarrygeez.JWriter.View.EditorView;
 import org.sarrygeez.JWriter.View.StatusBarView;
+import org.sarrygeez.JWriter.View.TextFormatterView;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.Element;
 import javax.swing.text.StyledDocument;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -25,6 +27,8 @@ public class EditorController {
 
     private StatusBarView statusBar;
     private final EditorView view;
+    private final TextFormatterView formatterView;
+    private final Application app;
 
     private final JComponent lineCount;
     private final JTextPane textEditor;
@@ -33,8 +37,11 @@ public class EditorController {
     private final DocumentHighlighter highlighter;
 
     public EditorController(Application app) {
+        this.app = app;
+
         DocumentHistory history = new DocumentHistory(this);
         this.documentFilter = new CustomDocumentFilter(history);
+        this.formatterView = new TextFormatterView(this);
 
         // Setup UI components
         // EditorView is the combination of the LineCount and the actual textEditor
@@ -44,13 +51,23 @@ public class EditorController {
 
         // Highlighter setup
         this.highlighter = new DocumentHighlighter(textEditor);
-        app.getThemeManager().registerComponent(this.highlighter);
 
+        // More setup.... 🔥🔥🔥`
+        app.getThemeManager().registerComponent(this.highlighter);
+        app.getThemeManager().registerComponent(this.formatterView);
         setupKeyBinds();
 
         // Initiate CommandMap
         commandMap.put("undo", new Undo(history, this));
         commandMap.put("redo", new Redo(history, this));
+    }
+
+    public Application getApp() {
+        return app;
+    }
+
+    public JTextPane getTextEditor() {
+        return textEditor;
     }
 
     public DocumentHighlighter getHighlighter() {
@@ -70,7 +87,9 @@ public class EditorController {
     }
 
     // Use this to display the editor to a Container
-    public JScrollPane display() {
+    public JPanel display() {
+        JPanel root = new JPanel(new BorderLayout());
+        root.setOpaque(false);
         JPanel p = new JPanel(new MigLayout("fill, insets 0, gap 0"));
 
         p.add(lineCount, "west, span, grow");
@@ -80,7 +99,10 @@ public class EditorController {
         scroll.setBorder(new EmptyBorder(0, 0, 0, 0));
         scroll.getHorizontalScrollBar().setUnitIncrement(15);
         scroll.getVerticalScrollBar().setUnitIncrement(15);
-        return scroll;
+
+        root.add(formatterView, BorderLayout.NORTH);
+        root.add(scroll, BorderLayout.CENTER);
+        return root;
     }
 
     public void setEditable(boolean flag) {
