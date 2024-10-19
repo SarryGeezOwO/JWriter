@@ -17,8 +17,8 @@ public class EditorView implements ThemedComponent{
     private final JTextPane textEditor;
     private final JPanel lineCount;
     private int lineNumber;
-    private final AttributeSet attrs;
 
+    private SimpleAttributeSet attrs;
     private Color lineCountForeground;
     private Color lineHighlightColor;
     private Color lineHighlightForeground;
@@ -68,7 +68,7 @@ public class EditorView implements ThemedComponent{
         StyledDocument styledDocument = textEditor.getStyledDocument();
         ((AbstractDocument) styledDocument).setDocumentFilter(documentFilter);
 
-        SimpleAttributeSet as = new SimpleAttributeSet();
+        attrs = new SimpleAttributeSet();
         // Tabs
         int tabSize = 40; // Set the tab size (in pixels)
         TabStop[] tabStops = new TabStop[10];
@@ -77,15 +77,14 @@ public class EditorView implements ThemedComponent{
         }
 
         TabSet tabSet = new TabSet(tabStops);
-        StyleConstants.setTabSet(as, tabSet);
+        StyleConstants.setTabSet(attrs, tabSet);
 
         // Set Default Font ([Lexend Deca] index = 1)
-        StyleConstants.setFontFamily(as, FontLoader.appFontsFamily.get(1));
-        StyleConstants.setFontSize(as, 16);
-        StyleConstants.setSpaceBelow(as, 3f);
-        attrs = as;
+        StyleConstants.setFontFamily(attrs, FontLoader.appFontsFamily.get(1));
+        StyleConstants.setFontSize(attrs, 16);
+        StyleConstants.setSpaceBelow(attrs, 3f);
 
-        textEditor.setParagraphAttributes(as, false);
+        textEditor.setParagraphAttributes(attrs, false);
 
         // TODO: Implement this when settings is added
         //textEditor.setCaret(new CustomCaret());
@@ -170,5 +169,14 @@ public class EditorView implements ThemedComponent{
 
     public int getLineNumber() {
         return lineNumber;
+    }
+
+    public SimpleAttributeSet getAttrs() {
+        return attrs;
+    }
+
+    public void setAttrs(SimpleAttributeSet attrs) {
+        this.attrs = attrs;
+        textEditor.setCharacterAttributes(attrs, false);
     }
 }

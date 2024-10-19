@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DiscordProjectSettings">
-    <option name="show" value="ASK" />
-    <option name="description" value="" />
-    <option name="applicationTheme" value="default" />
-    <option name="iconsTheme" value="default" />
+    <option name="show" value="APPLICATION" />
+    <option name="description" value="Brainrot shenanigans" />
+    <option name="applicationTheme" value="2024-icons" />
+    <option name="iconsTheme" value="catppuccin_mocha" />
     <option name="button1Title" value="" />
     <option name="button1Url" value="" />
     <option name="button2Title" value="" />

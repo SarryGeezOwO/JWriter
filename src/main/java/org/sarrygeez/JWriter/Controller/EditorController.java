@@ -11,7 +11,6 @@ import org.sarrygeez.JWriter.Core.Editor.DocumentMemento;
 import org.sarrygeez.JWriter.View.DocumentHighlighter;
 import org.sarrygeez.JWriter.View.EditorView;
 import org.sarrygeez.JWriter.View.StatusBarView;
-import org.sarrygeez.JWriter.View.TextFormatterView;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -27,7 +26,7 @@ public class EditorController {
 
     private StatusBarView statusBar;
     private final EditorView view;
-    private final TextFormatterView formatterView;
+    private final TextFormatterController formatterController;
     private final Application app;
 
     private final JComponent lineCount;
@@ -41,7 +40,7 @@ public class EditorController {
 
         DocumentHistory history = new DocumentHistory(this);
         this.documentFilter = new CustomDocumentFilter(history);
-        this.formatterView = new TextFormatterView(this);
+        this.formatterController = new TextFormatterController(this);
 
         // Setup UI components
         // EditorView is the combination of the LineCount and the actual textEditor
@@ -54,12 +53,16 @@ public class EditorController {
 
         // More setup.... 🔥🔥🔥`
         app.getThemeManager().registerComponent(this.highlighter);
-        app.getThemeManager().registerComponent(this.formatterView);
+        app.getThemeManager().registerComponent(this.formatterController.getView());
         setupKeyBinds();
 
         // Initiate CommandMap
         commandMap.put("undo", new Undo(history, this));
         commandMap.put("redo", new Redo(history, this));
+    }
+
+    public void requestFocus() {
+        getTextEditor().requestFocus();
     }
 
     public Application getApp() {
@@ -100,7 +103,7 @@ public class EditorController {
         scroll.getHorizontalScrollBar().setUnitIncrement(15);
         scroll.getVerticalScrollBar().setUnitIncrement(15);
 
-        root.add(formatterView, BorderLayout.NORTH);
+        root.add(formatterController.getView(), BorderLayout.NORTH);
         root.add(scroll, BorderLayout.CENTER);
         return root;
     }
