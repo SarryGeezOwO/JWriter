@@ -22,8 +22,8 @@ public class Undo implements Command {
         if(!controller.isEditable()) {
             return;
         }
+        history.movePointerBack();
         Optional<DocumentAction> action = history.getPointerAction();
         action.ifPresent(DocumentAction::unexecute);
-        history.movePointerBack();
     }
 }

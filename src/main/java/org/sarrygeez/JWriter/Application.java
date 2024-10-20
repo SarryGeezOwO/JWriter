@@ -3,8 +3,11 @@ package org.sarrygeez.JWriter;
 import org.sarrygeez.JWriter.Controller.EditorController;
 import org.sarrygeez.JWriter.Controller.HeaderController;
 import org.sarrygeez.JWriter.Controller.TitleBarMenuController;
+import org.sarrygeez.JWriter.Core.Commands.document.DocumentAction;
+import org.sarrygeez.JWriter.Core.Editor.HistoryListener;
 import org.sarrygeez.JWriter.Core.Theme;
 import org.sarrygeez.JWriter.Core.ThemeManager;
+import org.sarrygeez.JWriter.View.ActionHistoryView;
 import org.sarrygeez.JWriter.View.SidebarView;
 import org.sarrygeez.JWriter.View.StatusBarView;
 import org.sarrygeez.JWriter.View.ThemedComponent;
@@ -79,7 +82,20 @@ public class Application implements ThemedComponent {
             HeaderController headerController = new HeaderController(app, editorController);
             TitleBarMenuController titleBarMenuController = new TitleBarMenuController(editorController);
             StatusBarView statusBar = new StatusBarView(editorController, headerController);
+            ActionHistoryView actionHistory = new ActionHistoryView(editorController.getHistory());
             editorController.setStatusBar(statusBar);
+
+            editorController.addHistoryListener(new HistoryListener() {
+                @Override
+                public void onActionAdded(int newPointer, DocumentAction action) {
+                    actionHistory.refreshData(newPointer);
+                }
+
+                @Override
+                public void onPointerMove(int newPointer, boolean isForward) {
+                    actionHistory.refreshData(newPointer);
+                }
+            });
 
             themeManager.registerComponent(sidebar);
             themeManager.registerComponent(statusBar);
@@ -95,9 +111,9 @@ public class Application implements ThemedComponent {
             setLayout(new BorderLayout());
             add(sidebar, BorderLayout.WEST);
             add(statusBar, BorderLayout.SOUTH);
+            add(actionHistory, BorderLayout.EAST); // NOTE: This is a test for now, it should be a popup
             add(headerController.getView(), BorderLayout.NORTH);
             add(editorController.display(), BorderLayout.CENTER);
         }
-
     }
 }

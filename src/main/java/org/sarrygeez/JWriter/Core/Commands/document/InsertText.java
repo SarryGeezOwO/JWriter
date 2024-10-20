@@ -61,7 +61,7 @@ public class InsertText implements DocumentAction {
 
     @Override
     public String toString() {
-        return "\"" + text + "\"";
+        return "Insert Text: \"" + text + "\"";
     }
 
     @SuppressWarnings("unused")

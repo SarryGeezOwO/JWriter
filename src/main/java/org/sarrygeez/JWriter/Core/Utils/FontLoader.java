@@ -33,6 +33,7 @@ public class FontLoader {
                 appFontsFamily.add(appFont.getFamily());
 
                 GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(appFont);
+                fontMap.put(appFont.getFamily(), appFont);
 
                 is.close();
             }

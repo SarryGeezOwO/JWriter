@@ -5,8 +5,10 @@ import org.sarrygeez.JWriter.Application;
 import org.sarrygeez.JWriter.Core.Command;
 import org.sarrygeez.JWriter.Core.Commands.Redo;
 import org.sarrygeez.JWriter.Core.Commands.Undo;
+import org.sarrygeez.JWriter.Core.Commands.document.DocumentAction;
 import org.sarrygeez.JWriter.Core.Editor.CustomDocumentFilter;
 import org.sarrygeez.JWriter.Core.Editor.DocumentHistory;
+import org.sarrygeez.JWriter.Core.Editor.HistoryListener;
 import org.sarrygeez.JWriter.View.DocumentHighlighter;
 import org.sarrygeez.JWriter.View.EditorView;
 import org.sarrygeez.JWriter.View.StatusBarView;
@@ -21,6 +23,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class EditorController {
@@ -29,16 +32,21 @@ public class EditorController {
     private final EditorView view;
     private final TextFormatterController formatterController;
     private final Application app;
+    private final DocumentHistory history;
 
     private final JComponent lineCount;
     private final JTextPane textEditor;
     private final HashMap<String, Command> commandMap = new HashMap<>();
     private final DocumentHighlighter highlighter;
 
+    public void addHistoryListener(HistoryListener listener) {
+        history.addHistoryListener(listener);
+    }
+
     public EditorController(Application app) {
         this.app = app;
 
-        DocumentHistory history = new DocumentHistory();
+        history = new DocumentHistory();
         CustomDocumentFilter documentFilter = new CustomDocumentFilter(history, this);
         this.formatterController = new TextFormatterController(this);
 
@@ -63,6 +71,10 @@ public class EditorController {
 
     public void requestFocus() {
         getTextEditor().requestFocus();
+    }
+
+    public DocumentHistory getHistory() {
+        return history;
     }
 
     public Application getApp() {
