@@ -2,6 +2,7 @@ package org.sarrygeez.JWriter.View;
 
 import org.sarrygeez.JWriter.Controller.EditorController;
 import org.sarrygeez.JWriter.Core.Editor.CustomDocumentFilter;
+import org.sarrygeez.JWriter.Core.Editor.EditorContext;
 import org.sarrygeez.JWriter.Core.Theme;
 import org.sarrygeez.JWriter.Core.Utils.DocumentUtils;
 import org.sarrygeez.JWriter.Core.Utils.FontLoader;
@@ -68,23 +69,7 @@ public class EditorView implements ThemedComponent{
         StyledDocument styledDocument = textEditor.getStyledDocument();
         ((AbstractDocument) styledDocument).setDocumentFilter(documentFilter);
 
-        attrs = new SimpleAttributeSet();
-        // Tabs
-        int tabSize = 40; // Set the tab size (in pixels)
-        TabStop[] tabStops = new TabStop[10];
-        for (int i = 0; i < tabStops.length; i++) {
-            tabStops[i] = new TabStop((i + 1) * tabSize);
-        }
-
-        TabSet tabSet = new TabSet(tabStops);
-        StyleConstants.setTabSet(attrs, tabSet);
-
-        // Set Default Font ([Lexend Deca] index = 1)
-        StyleConstants.setFontFamily(attrs, FontLoader.appFontsFamily.get(1));
-        StyleConstants.setFontSize(attrs, 16);
-        StyleConstants.setSpaceBelow(attrs, 3f);
-
-        textEditor.setParagraphAttributes(attrs, false);
+        initEditorStyle();
 
         // TODO: Implement this when settings is added
         //textEditor.setCaret(new CustomCaret());
@@ -99,6 +84,26 @@ public class EditorView implements ThemedComponent{
         };
 
         updateFontMetrics();
+    }
+
+    private void initEditorStyle() {
+        attrs = new SimpleAttributeSet();
+        // Tabs
+        int tabSize = 40; // Set the tab size (in pixels)
+        TabStop[] tabStops = new TabStop[10];
+        for (int i = 0; i < tabStops.length; i++) {
+            tabStops[i] = new TabStop((i + 1) * tabSize);
+        }
+
+        TabSet tabSet = new TabSet(tabStops);
+        StyleConstants.setTabSet(attrs, tabSet);
+
+        // Set Default Font ([Lexend Deca] index = 1)
+        StyleConstants.setFontFamily(attrs, FontLoader.appFontsFamily.get(1));
+        StyleConstants.setFontSize(attrs, EditorContext.getDefaultFontSize());
+        StyleConstants.setSpaceBelow(attrs, EditorContext.getDefaultLineSpace());
+
+        textEditor.setParagraphAttributes(attrs, false);
     }
 
     public JTextPane displayTextEditor() {
@@ -122,8 +127,9 @@ public class EditorView implements ThemedComponent{
     public void updateFontMetrics() {
         // Calculate the height of a line accounting for line space
         FontMetrics metrics = DocumentUtils.getFontMetricsForStyledDocument(textEditor.getStyledDocument(), textEditor);
-        int fontHeight = metrics.getHeight();
         lineSpace = StyleConstants.getSpaceBelow(attrs);
+        int fontHeight = metrics.getHeight();
+
         lineHeight = (int)(fontHeight + (lineSpace));
     }
 

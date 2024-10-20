@@ -37,10 +37,12 @@ public class StatusBarView extends JPanel implements ThemedComponent {
         setLayout(new MigLayout("fill, inset 0, gap 10, rtl"));
 
         editMode.addActionListener(e -> setActive(!isActive()));
+        editMode.setToolTipText("Toggle Edit-mode");
         editModeLabel.setFontSize(12);
 
         lineCol.setText("1:0");
         lineCol.setFontSize(12);
+        lineCol.setToolTipText("Line : Column");
 
         add(editMode, "width 50, split");
         add(lineCol);

@@ -1,6 +1,5 @@
 package org.sarrygeez.JWriter.View;
 
-import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import org.sarrygeez.JWriter.Controller.TextFormatterController;
 import org.sarrygeez.JWriter.Core.Theme;
@@ -8,8 +7,8 @@ import org.sarrygeez.JWriter.Core.Utils.ComponentDecorator;
 import org.sarrygeez.JWriter.Widget.ImageButton;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 import static org.sarrygeez.JWriter.Controller.TextFormatterController.Styles.*;
 
@@ -25,12 +24,10 @@ public class TextFormatterView extends JPanel implements ThemedComponent{
     private final ImageButton strikeButton = new ImageButton("strike", 22);
     private final boolean[] isButtonActive = {false, false, false, false}; // Yes, this shit is primitive af
 
+    private final ImageButton helpButton = new ImageButton("question", 20);
+
     private Color defaultCol;
     private Color activeCol;
-
-    private final String[] headingLevels = {
-            " Normal text", " Heading 1", " Heading 2", " Heading 3", " Heading 4"};
-    private final JComboBox<String> box = new JComboBox<>(headingLevels);
 
     @Override
     public void applyTheme(Theme theme) {
@@ -40,18 +37,6 @@ public class TextFormatterView extends JPanel implements ThemedComponent{
 
         defaultCol = Color.decode(theme.getColor("primary"));
         activeCol = Color.decode(theme.getColor("accent"));
-
-        UIManager.put("ComboBox.selectionBackground", Color.decode(theme.getColor("secondary")));
-        UIManager.put("ComboBox.selectionForeground", Color.decode(theme.getColor("primary")));
-        UIManager.put("Separator.foreground", Color.decode(theme.getColor("border")));
-
-        box.putClientProperty(FlatClientProperties.STYLE,
-            "buttonStyle: button" +
-            ";background:" + theme.getColor("accent") +
-            ";foreground:" + theme.getColor("text") +
-            ";buttonEditableBackground:" + theme.getColor("accent") +
-            ";buttonArrowColor:" + theme.getColor("text"));
-        box.revalidate();
     }
 
 // UI design goal can be seen in: root/misc/textFormatUI.png
@@ -63,24 +48,15 @@ public class TextFormatterView extends JPanel implements ThemedComponent{
         setPreferredSize(new Dimension(0, 35));
         setLayout(new BorderLayout());
         dummy.setPreferredSize(new Dimension(50, 0));
-
-        box.setBorder(new EmptyBorder(0, 5, 0, 5));
-        box.addItemListener(e -> {
-            // TODO: Implement this
-            if (box.getSelectedItem() == e.getItem()) {
-                System.out.println("Change Heading -> " + e.getItem().toString());
-                controller.getEditorController().requestFocus();
-            }
-        });
         initButtons();
 
-        main.add(box, "growY, gapTop 5, gapBottom 5");
         insertSeparator();
-        insertButton(boldButton,      0);
-        insertButton(italicButton,    1);
-        insertButton(underlineButton, 2);
-        insertButton(strikeButton,    3);
+        insertToggleButton(boldButton,      0, 'b');
+        insertToggleButton(italicButton,    1, 'i');
+        insertToggleButton(underlineButton, 2, 'u');
+        insertToggleButton(strikeButton,    3, 's');
         insertSeparator();
+        insertButton(helpButton, 'h', null);
 
         add(dummy, BorderLayout.WEST);
         add(main, BorderLayout.CENTER);
@@ -93,9 +69,18 @@ public class TextFormatterView extends JPanel implements ThemedComponent{
         strikeButton.addActionListener(e    -> controller.setStyle(STRIKE));
     }
 
-    private void insertButton(ImageButton btn, int index) {
+    private void insertButton(ImageButton btn, char mm, ActionListener al) {
         main.add(btn, "grow");
         controller.getEditorController().getApp().getThemeManager().registerComponent(btn);
+        btn.setMnemonic(mm);
+        if(al != null)
+            btn.addActionListener(al);
+    }
+
+    private void insertToggleButton(ImageButton btn, int index, char mm) {
+        main.add(btn, "grow");
+        controller.getEditorController().getApp().getThemeManager().registerComponent(btn);
+        btn.setMnemonic(mm);
         btn.addActionListener(e -> {
             // Transfer focus to editor, and set isActive value
             isButtonActive[index] = !isButtonActive[index];

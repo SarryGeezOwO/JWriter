@@ -1,56 +1,72 @@
 package org.sarrygeez.JWriter.Core.Editor;
 
-import org.sarrygeez.JWriter.Controller.EditorController;
+import org.sarrygeez.JWriter.Core.Commands.document.DocumentAction;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Stack;
 
 public class DocumentHistory {
 
-    private final Stack<DocumentMemento> undoStack = new Stack<>();
-    private final Stack<DocumentMemento> redoStack = new Stack<>();
-    private final EditorController controller;
+    private final List<DocumentAction> actionHistory = new ArrayList<>();
+    private int pointer = 0;
 
-    public DocumentHistory(EditorController controller) {
-        this.controller = controller;
+    public void addAction(DocumentAction action) {
+        pointer++;
+        if(pointer < actionHistory.size()) {
+            actionHistory.set(pointer, action);
+            actionHistory.subList(pointer + 1, actionHistory.size()).clear();
+        }
+        else {
+            actionHistory.add(action);
+        }
     }
 
-    public void flushHistory() {
-        undoStack.clear();
-        redoStack.clear();
-    }
-
-    public void saveEditorState() {
-        undoStack.push(controller.createMemento());
-        redoStack.clear();
-    }
-
-    public Optional<DocumentMemento> getUndoState() {
-        // Avoid Throwing that shit is garbage, instead let's just
-        // expect a null being returned instead
-
-        if(undoStack.isEmpty()) {
+    public Optional<DocumentAction> getPointerAction() {
+        if (pointer >= 0 && pointer < actionHistory.size()) {
+            return Optional.ofNullable(actionHistory.get(pointer));
+        } else {
+            System.out.println("Pointer out of bounds.");
             return Optional.empty();
         }
-
-        redoStack.add(controller.createMemento());
-        return Optional.ofNullable(undoStack.pop());
     }
 
-    public Optional<DocumentMemento> getRedoState() {
-        if(redoStack.isEmpty()) {
-            return Optional.empty();
+    @SuppressWarnings("unused") // Cool
+    private void printHistory() {
+        if(pointer <= -1 || pointer >= actionHistory.size()) {
+            return;
         }
 
-        undoStack.add(controller.createMemento());
-        return Optional.ofNullable(redoStack.pop());
+        DocumentAction current = actionHistory.get(pointer);
+        for(DocumentAction action : actionHistory) {
+            if(action == current) {
+                System.out.print("->[" + action.toString()+"] ");
+            }
+            else {
+                System.out.print("  ["+action.toString()+"] ");
+            }
+            System.out.print("   ");
+        }
+        System.out.println();
     }
 
-    public int getUndoSize() {
-        return undoStack.size();
+    public void movePointerBack() {
+        if(actionHistory.isEmpty()) {
+            return;
+        }
+
+        if(pointer > 0) {
+            pointer--;
+        }
     }
 
-    public int getRedoSize() {
-        return redoStack.size();
+    public void movePointerForward() {
+        if(actionHistory.isEmpty()) {
+            return;
+        }
+
+        if(pointer + 1 < actionHistory.size()) {
+            pointer++;
+        }
     }
 }

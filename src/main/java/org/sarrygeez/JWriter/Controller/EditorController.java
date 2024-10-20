@@ -7,7 +7,6 @@ import org.sarrygeez.JWriter.Core.Commands.Redo;
 import org.sarrygeez.JWriter.Core.Commands.Undo;
 import org.sarrygeez.JWriter.Core.Editor.CustomDocumentFilter;
 import org.sarrygeez.JWriter.Core.Editor.DocumentHistory;
-import org.sarrygeez.JWriter.Core.Editor.DocumentMemento;
 import org.sarrygeez.JWriter.View.DocumentHighlighter;
 import org.sarrygeez.JWriter.View.EditorView;
 import org.sarrygeez.JWriter.View.StatusBarView;
@@ -15,6 +14,8 @@ import org.sarrygeez.JWriter.View.StatusBarView;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.Element;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -31,15 +32,14 @@ public class EditorController {
 
     private final JComponent lineCount;
     private final JTextPane textEditor;
-    private final CustomDocumentFilter documentFilter;
     private final HashMap<String, Command> commandMap = new HashMap<>();
     private final DocumentHighlighter highlighter;
 
     public EditorController(Application app) {
         this.app = app;
 
-        DocumentHistory history = new DocumentHistory(this);
-        this.documentFilter = new CustomDocumentFilter(history);
+        DocumentHistory history = new DocumentHistory();
+        CustomDocumentFilter documentFilter = new CustomDocumentFilter(history, this);
         this.formatterController = new TextFormatterController(this);
 
         // Setup UI components
@@ -87,6 +87,16 @@ public class EditorController {
 
     public EditorView getView() {
         return view;
+    }
+
+    // Use values from EditorContext and pass it in here
+    @SuppressWarnings("unused")
+    public void UpdateFont(String family, int size, float spacing) {
+        SimpleAttributeSet attrs = getView().getAttrs();
+        StyleConstants.setFontFamily(attrs, family);
+        StyleConstants.setFontSize(attrs, size);
+        StyleConstants.setSpaceBelow(attrs, spacing);
+        getView().setAttrs(attrs);
     }
 
     // Use this to display the editor to a Container
@@ -163,15 +173,5 @@ public class EditorController {
         else {
             System.err.println("Command not found: " + commandKey);
         }
-    }
-
-    public DocumentMemento createMemento() {
-        return new DocumentMemento(textEditor.getText());
-    }
-
-    public void setDocumentMemento(DocumentMemento state) {
-        documentFilter.beginProgrammaticChange();
-        textEditor.setText(state.state());
-        documentFilter.endProgrammaticChange();
     }
 }

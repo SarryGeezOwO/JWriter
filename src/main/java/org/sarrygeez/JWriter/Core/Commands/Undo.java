@@ -2,8 +2,8 @@ package org.sarrygeez.JWriter.Core.Commands;
 
 import org.sarrygeez.JWriter.Controller.EditorController;
 import org.sarrygeez.JWriter.Core.Command;
+import org.sarrygeez.JWriter.Core.Commands.document.DocumentAction;
 import org.sarrygeez.JWriter.Core.Editor.DocumentHistory;
-import org.sarrygeez.JWriter.Core.Editor.DocumentMemento;
 
 import java.util.Optional;
 
@@ -22,8 +22,8 @@ public class Undo implements Command {
         if(!controller.isEditable()) {
             return;
         }
-
-        Optional<DocumentMemento> memento = history.getUndoState();
-        memento.ifPresent(controller::setDocumentMemento);
+        Optional<DocumentAction> action = history.getPointerAction();
+        action.ifPresent(DocumentAction::unexecute);
+        history.movePointerBack();
     }
 }
