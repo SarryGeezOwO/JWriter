@@ -32,6 +32,32 @@ public class DocumentHistory {
         pointer++;
     }
 
+    public void executePointerCommand() {
+        Optional<DocumentAction> act = getPointerAction();
+        if(act.isEmpty()) {
+            return;
+        }
+
+        DocumentAction action = act.get();
+        if(!action.isExecuted) {
+            action.execute();
+            action.isExecuted = true;
+        }
+    }
+
+    public void unexecutePointerCommand() {
+        Optional<DocumentAction> act = getPointerAction();
+        if(act.isEmpty()) {
+            return;
+        }
+
+        DocumentAction action = act.get();
+        if(action.isExecuted) {
+            action.unexecute();
+            action.isExecuted = false;
+        }
+    }
+
     public Optional<DocumentAction> getPointerAction() {
         if (pointer >= 0 && pointer < actionHistory.size()) {
             return Optional.ofNullable(actionHistory.get(pointer));
@@ -66,7 +92,6 @@ public class DocumentHistory {
 
         if(pointer > 0) {
             pointer--;
-            pointer = Math.clamp(pointer, 0, actionHistory.size()-1);
 
             if(listener != null) {
                 listener.onPointerMove(pointer, false);

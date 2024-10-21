@@ -3,6 +3,8 @@ package org.sarrygeez.JWriter;
 import org.sarrygeez.JWriter.Controller.EditorController;
 import org.sarrygeez.JWriter.Controller.HeaderController;
 import org.sarrygeez.JWriter.Controller.TitleBarMenuController;
+import org.sarrygeez.JWriter.Core.Commands.document.DocumentAction;
+import org.sarrygeez.JWriter.Core.Editor.HistoryListener;
 import org.sarrygeez.JWriter.Core.Theme;
 import org.sarrygeez.JWriter.Core.ThemeManager;
 import org.sarrygeez.JWriter.View.SidebarView;
@@ -80,6 +82,19 @@ public class Application implements ThemedComponent {
             TitleBarMenuController titleBarMenuController = new TitleBarMenuController(editorController);
             StatusBarView statusBar = new StatusBarView(editorController, headerController);
             editorController.setStatusBar(statusBar);
+
+            // NOTE: Remove this if debugging is done to ActionHistory
+            editorController.addHistoryListener(new HistoryListener() {
+                @Override
+                public void onActionAdded(int newPointer, DocumentAction action) {
+                    editorController.getHistory().printHistory();
+                }
+
+                @Override
+                public void onPointerMove(int newPointer, boolean isForward) {
+                    editorController.getHistory().printHistory();
+                }
+            });
 
             themeManager.registerComponent(sidebar);
             themeManager.registerComponent(statusBar);

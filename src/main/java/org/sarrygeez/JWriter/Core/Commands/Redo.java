@@ -22,8 +22,7 @@ public class Redo implements Command {
         if(!controller.isEditable()) {
             return;
         }
-        Optional<DocumentAction> action = history.getPointerAction();
-        action.ifPresent(DocumentAction::execute);
+        history.executePointerCommand();
         history.movePointerForward();
     }
 }

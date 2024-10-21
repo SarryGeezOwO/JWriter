@@ -8,8 +8,6 @@ import javax.swing.text.Document;
 
 public class InsertText extends DocumentAction {
 
-    // Introduction of isExecuted, enables actions to be executed once
-
     private final String text;
     private final int offset;
     private final Document editor;
@@ -26,27 +24,25 @@ public class InsertText extends DocumentAction {
 
     @Override
     public void execute() {
-        super.execute();
         try {
             filter.beginProgrammaticChange();
             editor.insertString(offset, text, attrs);
             filter.endProgrammaticChange();
         }
         catch (BadLocationException e) {
-            throw new RuntimeException(e);
+            System.err.println(e.getMessage());
         }
     }
 
     @Override
     public void unexecute() {
-        super.unexecute();
         try {
             filter.beginProgrammaticChange();
             editor.remove(offset, text.length());
             filter.endProgrammaticChange();
         }
         catch (BadLocationException e) {
-            throw new RuntimeException(e);
+            System.err.println(e.getMessage());
         }
     }
 

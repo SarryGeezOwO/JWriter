@@ -24,7 +24,6 @@ public class RemoveText extends DocumentAction{
 
     @Override
     public void execute() {
-        super.execute();
         try {
             filter.beginProgrammaticChange();
             editor.remove(offset, text.length());
@@ -37,7 +36,6 @@ public class RemoveText extends DocumentAction{
 
     @Override
     public void unexecute() {
-        super.unexecute();
         try {
             filter.beginProgrammaticChange();
             editor.insertString(offset, text, attrs);

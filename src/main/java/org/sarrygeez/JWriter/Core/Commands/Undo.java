@@ -23,7 +23,6 @@ public class Undo implements Command {
             return;
         }
         history.movePointerBack();
-        Optional<DocumentAction> action = history.getPointerAction();
-        action.ifPresent(DocumentAction::unexecute);
+        history.unexecutePointerCommand();
     }
 }
