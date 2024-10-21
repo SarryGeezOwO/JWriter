@@ -6,7 +6,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
-public class InsertText implements DocumentAction {
+public class InsertText extends DocumentAction {
 
     // Introduction of isExecuted, enables actions to be executed once
 
@@ -15,7 +15,6 @@ public class InsertText implements DocumentAction {
     private final Document editor;
     private final AttributeSet attrs;
     private final CustomDocumentFilter filter;
-    private boolean isExecuted = true; // By default, they're true, executed by the CustomDocumentFilter
 
     public InsertText(String text, int offset, CustomDocumentFilter filter, Document editor, AttributeSet attrs) {
         this.text = text;
@@ -27,15 +26,11 @@ public class InsertText implements DocumentAction {
 
     @Override
     public void execute() {
-        if(isExecuted) {
-            return;
-        }
-
+        super.execute();
         try {
             filter.beginProgrammaticChange();
             editor.insertString(offset, text, attrs);
             filter.endProgrammaticChange();
-            isExecuted = true;
         }
         catch (BadLocationException e) {
             throw new RuntimeException(e);
@@ -44,15 +39,11 @@ public class InsertText implements DocumentAction {
 
     @Override
     public void unexecute() {
-        if(!isExecuted) {
-            return;
-        }
-
+        super.unexecute();
         try {
             filter.beginProgrammaticChange();
             editor.remove(offset, text.length());
             filter.endProgrammaticChange();
-            isExecuted = false;
         }
         catch (BadLocationException e) {
             throw new RuntimeException(e);

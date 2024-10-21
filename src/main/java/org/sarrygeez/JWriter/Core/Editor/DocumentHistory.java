@@ -40,6 +40,25 @@ public class DocumentHistory {
         }
     }
 
+    @SuppressWarnings("unused") // For debugging purposes, yes, hate me...
+    public void printHistory() {
+        if(pointer <= -1 || pointer >= actionHistory.size()) {
+            return;
+        }
+
+        DocumentAction current = actionHistory.get(pointer);
+        for(DocumentAction action : actionHistory) {
+            if(action == current) {
+                System.out.print("->[" + action.toString()+"] ");
+            }
+            else {
+                System.out.print("  ["+action.toString()+"] ");
+            }
+            System.out.print("   ");
+        }
+        System.out.println();
+    }
+
     public void movePointerBack() {
         if(actionHistory.isEmpty()) {
             return;
@@ -70,11 +89,13 @@ public class DocumentHistory {
         }
     }
 
-    public List<DocumentAction> getActionHistory() {
+    @SuppressWarnings("unused")
+    public List<DocumentAction> getHistory() {
         // to avoid other class modifying it
         return Collections.unmodifiableList(actionHistory);
     }
 
+    @SuppressWarnings("unused")
     public int getPointer() {
         if(actionHistory.isEmpty()) {
             return 0;
