@@ -1,5 +1,8 @@
 package org.sarrygeez.JWriter.Core.Utils;
 
+import org.sarrygeez.JWriter.Core.Utils.Logger.LogType;
+import org.sarrygeez.JWriter.Launcher;
+
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -22,11 +25,12 @@ public class FontLoader {
     public static final List<String> appFontsFamily = new ArrayList<>();
 
     public static void loadAppFonts() {
-        try {
-            for(String font : appFonts) {
-                InputStream is = FontLoader.class.getResourceAsStream("/AppFonts/" + font);
+        for(String font : appFonts) {
+            try(InputStream is = FontLoader.class.getResourceAsStream("/AppFonts/" + font)) {
                 if (is == null) {
-                    throw new RuntimeException("Font file not found: {"+ font +"}.");
+                    String errMsg = "Resource font not found: {"+font+"}.";
+                    Launcher.log(LogType.ERROR, errMsg);
+                    throw new RuntimeException(errMsg);
                 }
 
                 Font appFont = Font.createFont(Font.TRUETYPE_FONT, is);
@@ -34,24 +38,26 @@ public class FontLoader {
 
                 GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(appFont);
                 fontMap.put(appFont.getFamily(), appFont);
-
-                is.close();
             }
-        }
-        catch (IOException | FontFormatException e) {
-            throw new RuntimeException(e);
+            catch (IOException e) {
+                Launcher.log(LogType.ERROR, "FontStream incomplete read: "+e.getMessage()+".");
+                throw new RuntimeException(e);
+            }
+            catch (FontFormatException e) {
+                // Prepare a fallback font for UIs using an AppFont(resource Font)
+                Launcher.log(LogType.ERROR, "Font not loaded properly {"+font+"}: "+e.getMessage()+".");
+                throw new RuntimeException(e);
+            }
         }
     }
 
     public static void loadCustomFont(String baseDir) {
-        try {
-            File dir = new File(baseDir + "/fonts");
-            if (dir.mkdir()) {
-                // Change this into a proper logger please
-                System.out.println("Base directory for fonts created");
-            }
-
-            for(File font : Objects.requireNonNull(dir.listFiles())) {
+        File dir = new File(baseDir + "/fonts");
+        if (dir.mkdir()) {
+            Launcher.log(LogType.INFO, "Base directory for custom fonts created");
+        }
+        for(File font : Objects.requireNonNull(dir.listFiles())) {
+            try {
                 if(!font.getName().endsWith(".ttf")) {
                     continue;
                 }
@@ -60,14 +66,19 @@ public class FontLoader {
                 fontMap.put(f.getFamily(), f);
 
                 GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(f);
-                System.out.println("Custom Font loaded: {"+ f.getFamily() +"}.");
+                Launcher.log(LogType.SUCCESS, "Custom Font loaded: {"+ f.getFamily() +"}.");
             }
-        }
-        catch (IOException | FontFormatException e) {
-            throw new RuntimeException(e);
+            // If a catch happens, ignore the font from being available
+            catch (IOException e) {
+                Launcher.log(LogType.ERROR, "FontStream incomplete read: "+e.getMessage()+".");
+            }
+            catch (FontFormatException e) {
+                Launcher.log(LogType.ERROR, "Font not loaded properly {"+font.getName()+"}: "+e.getMessage()+".");
+            }
         }
     }
 
+    @SuppressWarnings("unused")
     public static Font getFont(String fontFamily) {
         return fontMap.get(fontFamily);
     }

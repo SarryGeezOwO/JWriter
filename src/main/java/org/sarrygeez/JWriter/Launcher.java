@@ -60,6 +60,7 @@ public class Launcher {
             System.out.println("Logger base folder created");
         }
         logger.setBaseDir(logFolder.getAbsolutePath());
+        logger.log(LogType.INFO, "Program process started.");
     }
 
     public static Logger getLogger() {

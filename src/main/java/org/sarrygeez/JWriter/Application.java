@@ -26,12 +26,12 @@ public class Application implements ThemedComponent {
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowOpened(WindowEvent e) {
-                Launcher.log(LogType.INFO, "Application opened.");
+                Launcher.log(LogType.INFO, "Application frame opened.");
             }
 
             @Override
             public void windowClosed(WindowEvent e) {
-                Launcher.log(LogType.INFO, "Application closed.");
+                Launcher.log(LogType.INFO, "Application frame closed.");
                 Launcher.getLogger().dumpToDisk();
             }
         });

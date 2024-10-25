@@ -29,10 +29,7 @@ public class Logger {
         File logFile = new File(baseLogDir + "/log["+currentDate+"].txt");
 
         try {
-            if(logFile.createNewFile()) {
-                log(LogType.INFO, "Log file: [" + currentDate + "] created.");
-            }
-
+            // FileWriter will create the log file, if it doesn't exist yet
             BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true));
             for(Log log : logEntries) {
                 writer.write(log.toString());

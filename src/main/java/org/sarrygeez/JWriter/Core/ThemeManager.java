@@ -4,7 +4,10 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import org.sarrygeez.JWriter.Core.Utils.Logger.LogType;
+import org.sarrygeez.JWriter.Launcher;
 import org.sarrygeez.JWriter.View.ThemedComponent;
 
 import javax.swing.*;
@@ -26,9 +29,8 @@ public class ThemeManager {
 
     public void loadResourceThemeFiles() {
         Gson gson = new Gson();
-        try {
-            for(String theme : resourceThemes) {
-                InputStream is = ThemeManager.class.getResourceAsStream("/DefaultTheme/" + theme);
+        for(String theme : resourceThemes) {
+            try (InputStream is = ThemeManager.class.getResourceAsStream("/DefaultTheme/" + theme)) {
                 if (is == null) {
                     throw new RuntimeException("Theme file not found: {"+ theme +"}.");
                 }
@@ -39,12 +41,11 @@ public class ThemeManager {
                 Type type = new TypeToken<Theme>(){}.getType();
                 Theme material = gson.fromJson(json, type);
                 availableThemes.put(material.name, material);
-
-                is.close();
             }
-        }
-        catch (IOException  e) {
-            throw new RuntimeException(e);
+            catch (IOException  e) {
+                Launcher.log(LogType.ERROR, "Failed to load default themes {"+e.getMessage()+"}.");
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -53,8 +54,13 @@ public class ThemeManager {
 
         File themeDir = new File(baseDir);
         for(File theme : Objects.requireNonNull(themeDir.listFiles())) {
+            // Skip files that are not JSON
+            if(!theme.getName().endsWith(".json")) {
+                Launcher.log(LogType.INFO, "Custom theme file attempt, invalid file format {"+ theme.getName() + "}.");
+                continue;
+            }
 
-            try (BufferedReader reader = new BufferedReader(new FileReader(theme)); ) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(theme)) ) {
 
                 // Read the file and transform it to a JSON type
                 String line;
@@ -67,9 +73,14 @@ public class ThemeManager {
                 Type type = new TypeToken<Theme>(){}.getType();
                 Theme material = gson.fromJson(json.toString(), type);
                 availableThemes.put(material.name, material);
+                Launcher.log(LogType.SUCCESS, "Loaded theme file {"+ theme.getName() +"}.");
             }
             catch (IOException e) {
-                throw new RuntimeException(e);
+                Launcher.log(LogType.ERROR, "Failed to load theme file {"+ theme.getName() + "}: " + e.getMessage() +".");
+            }
+            catch (JsonSyntaxException e) {
+                // Don't terminate program, just ignore the theme file
+                Launcher.log(LogType.ERROR, "JSON Syntax error {"+ theme.getName() + "}: " + e.getMessage() +".");
             }
         }
     }
@@ -85,7 +96,6 @@ public class ThemeManager {
     }
 
     public void applyTheme() {
-        System.out.println(getCurrentTheme().name);
         try {
             // Update Frame mode
             UIManager.setLookAndFeel(currentTheme.isLightTheme ?
@@ -100,17 +110,24 @@ public class ThemeManager {
         }
 
         FlatLaf.updateUI();
+        Launcher.log(LogType.SUCCESS, "Theme Applied {" + getCurrentTheme().name + "}.");
     }
 
     public void registerComponent(ThemedComponent component) {
         themedComponents.add(component);
     }
 
+    @SuppressWarnings("unused")
     public void unregisterComponent(ThemedComponent component) {
         themedComponents.remove(component);
     }
 
     public Theme getCurrentTheme() {
         return currentTheme;
+    }
+
+    @SuppressWarnings("unused")
+    public HashMap<String, Theme> getAvailableThemes() {
+        return availableThemes;
     }
 }
