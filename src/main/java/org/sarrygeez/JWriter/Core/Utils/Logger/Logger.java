@@ -11,9 +11,19 @@ import java.util.List;
 
 public class Logger {
 
+    // Write logs by default
+    private boolean writeToDisc = true;
     private String baseLogDir;
     private final List<Log> logEntries = new ArrayList<>();
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    public void setWriteToDisc(boolean writeToDisc) {
+        this.writeToDisc = writeToDisc;
+    }
+
+    public boolean isWriteToDisc() {
+        return writeToDisc;
+    }
 
     public void setBaseDir(String baseLogDir) {
         this.baseLogDir = baseLogDir;
@@ -25,6 +35,11 @@ public class Logger {
     }
 
     public void dumpToDisk() {
+        if(isWriteToDisc()) {
+            System.out.println("Logging disabled");
+            return;
+        }
+
         String currentDate = LocalDate.now().format(formatter);
         File logFile = new File(baseLogDir + "/log["+currentDate+"].txt");
 

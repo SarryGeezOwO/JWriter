@@ -102,6 +102,7 @@ public class Launcher {
     private static void handleAdditionalArg(String arg) {
         switch (arg) {
             case "-dl":
+                getLogger().setWriteToDisc(false);
                 break;
             case "-t":
                 System.out.print("Theme Name\n> ");
