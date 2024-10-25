@@ -3,7 +3,6 @@ package org.sarrygeez.JWriter.Core.Utils;
 import org.sarrygeez.JWriter.Core.Theme;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
@@ -23,6 +22,7 @@ public class ComponentDecorator {
 
     public static void addPaddedBorder(EmptyBorder padding, Insets inset, JComponent component, Theme theme) {
         if(!theme.enableBorder) {
+            component.setBorder(padding);
             return;
         }
 

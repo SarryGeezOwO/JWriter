@@ -35,6 +35,7 @@ public class Logger {
                 writer.write(log.toString());
                 writer.newLine();
             }
+            writer.newLine();
             writer.close();
         } catch (IOException e) {
             throw new RuntimeException(e);

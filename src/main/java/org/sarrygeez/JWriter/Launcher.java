@@ -11,6 +11,7 @@ import org.sarrygeez.JWriter.Core.Utils.Logger.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.util.Scanner;
 
 public class Launcher {
 
@@ -21,6 +22,7 @@ public class Launcher {
     // But we are using In-Memory logging anyway
     // The writing to the disc will be triggered when the app closed
     private static final Logger logger = new Logger();
+    private static String initTheme = "Default Dark Theme"; // Startup theme to use
 
     Launcher(String baseDir) {
         // Default themes are stored in the resource directory
@@ -31,7 +33,7 @@ public class Launcher {
 
         handleCrash();
         EventQueue.invokeLater(() ->
-                new Application(themeManager, "Default Dark Theme"));
+                new Application(themeManager, initTheme));
     }
 
     private void handleCrash() {
@@ -75,14 +77,40 @@ public class Launcher {
         setupFlatLaF();
 
         // Don't open the app, instead show an error window
-        if(args.length != 1) {
+        if(args.length < 1) {
             JOptionPane.showMessageDialog(
                     null, "Base directory is missing", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
+/*
+    NOTE: Optional launcher configurations
+        "-dl" < Disable logging(for idk, small fixes ig?)
+        "-t"  < Select a theme on startup (overriding the saved settings)
+*/
+        if(args.length > 1) { // Additional argument options
+            for(int i = 2; i < args.length; i++) {
+                handleAdditionalArg(args[i]);
+            }
+        }
+
         String dir = args[0];
         setupLogger(dir);
         new Launcher(dir);
+    }
+
+    private static void handleAdditionalArg(String arg) {
+        switch (arg) {
+            case "-dl":
+                break;
+            case "-t":
+                System.out.print("Theme Name\n> ");
+                Scanner scanner = new Scanner(System.in);
+                initTheme = scanner.nextLine();
+                break;
+            default:
+                System.err.println("Unknown argument: {"+ arg + "}.");
+                break;
+        }
     }
 }

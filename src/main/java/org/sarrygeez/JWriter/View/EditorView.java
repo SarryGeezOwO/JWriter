@@ -4,10 +4,12 @@ import org.sarrygeez.JWriter.Controller.EditorController;
 import org.sarrygeez.JWriter.Core.Editor.CustomDocumentFilter;
 import org.sarrygeez.JWriter.Core.Editor.EditorContext;
 import org.sarrygeez.JWriter.Core.Theme;
+import org.sarrygeez.JWriter.Core.Utils.ComponentDecorator;
 import org.sarrygeez.JWriter.Core.Utils.DocumentUtils;
 import org.sarrygeez.JWriter.Core.Utils.FontLoader;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -41,6 +43,7 @@ public class EditorView implements ThemedComponent{
         lineCountForeground = Color.decode(theme.getEditor("lineCountForeground"));
         lineHighlightColor = Color.decode(theme.getEditor("lineHighlightBackground"));
         lineHighlightForeground = Color.decode(theme.getEditor("lineHighlightForeground"));
+        ComponentDecorator.addPaddedBorder(new EmptyBorder(5,5,0,5), new Insets(0,1,0,0), textEditor, theme);
     }
 
     public EditorView(EditorController controller, CustomDocumentFilter documentFilter) {
@@ -65,7 +68,6 @@ public class EditorView implements ThemedComponent{
             }
         };
         textEditor.setOpaque(false);
-        textEditor.setMargin(new Insets(5, 5, 0, 5));
         StyledDocument styledDocument = textEditor.getStyledDocument();
         ((AbstractDocument) styledDocument).setDocumentFilter(documentFilter);
 
