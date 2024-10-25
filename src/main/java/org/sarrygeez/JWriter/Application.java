@@ -3,10 +3,9 @@ package org.sarrygeez.JWriter;
 import org.sarrygeez.JWriter.Controller.EditorController;
 import org.sarrygeez.JWriter.Controller.HeaderController;
 import org.sarrygeez.JWriter.Controller.TitleBarMenuController;
-import org.sarrygeez.JWriter.Core.Commands.document.DocumentAction;
-import org.sarrygeez.JWriter.Core.Editor.HistoryListener;
 import org.sarrygeez.JWriter.Core.Theme;
 import org.sarrygeez.JWriter.Core.ThemeManager;
+import org.sarrygeez.JWriter.Core.Utils.Logger.LogType;
 import org.sarrygeez.JWriter.View.SidebarView;
 import org.sarrygeez.JWriter.View.StatusBarView;
 import org.sarrygeez.JWriter.View.ThemedComponent;
@@ -24,18 +23,23 @@ public class Application implements ThemedComponent {
     private final String initialTheme;
 
     Application(ThemeManager themeManager, String initialTheme) {
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                Launcher.log(LogType.INFO, "Application opened.");
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                Launcher.log(LogType.INFO, "Application closed.");
+                Launcher.getLogger().dumpToDisk();
+            }
+        });
+
         this.themeManager = themeManager;
         this.initialTheme = initialTheme;
         themeManager.registerComponent(this);
         initFrame();
-
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                super.windowClosed(e);
-                // Do shit before closing app
-            }
-        });
     }
 
     @Override
@@ -52,7 +56,7 @@ public class Application implements ThemedComponent {
         frame.setSize(startSize);
         frame.setMinimumSize(new Dimension(400, 300));
         frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setContentPane(new ContentPane(this));
 
         frame.setIconImage(new ImageIcon("AppIcon.png").getImage());
@@ -82,19 +86,6 @@ public class Application implements ThemedComponent {
             TitleBarMenuController titleBarMenuController = new TitleBarMenuController(editorController);
             StatusBarView statusBar = new StatusBarView(editorController, headerController);
             editorController.setStatusBar(statusBar);
-
-            // NOTE: Remove this if debugging is done to ActionHistory
-            editorController.addHistoryListener(new HistoryListener() {
-                @Override
-                public void onActionAdded(int newPointer, DocumentAction action) {
-                    editorController.getHistory().printHistory();
-                }
-
-                @Override
-                public void onPointerMove(int newPointer, boolean isForward) {
-                    editorController.getHistory().printHistory();
-                }
-            });
 
             themeManager.registerComponent(sidebar);
             themeManager.registerComponent(statusBar);
