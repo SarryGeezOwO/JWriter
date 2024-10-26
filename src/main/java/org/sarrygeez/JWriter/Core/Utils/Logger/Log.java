@@ -15,7 +15,8 @@ public class Log {
     private final String message;
     private final LogType type;
 
-    private static final DateTimeFormatter LOG_DATE_FORMATTER = DateTimeFormatter.ofPattern("MMMM-d-yyyy [HH:mm:ss]");
+    private static final DateTimeFormatter LOG_DATE_FORMATTER =
+            DateTimeFormatter.ofPattern("MM-d-yyyy  [HH:mm:ss]");
 
     public Log(String message, LogType type) {
         this.message = message;
@@ -41,7 +42,7 @@ public class Log {
 
     @Override
     public String toString() {
-        return "["+getType()+"] " + getDateTime() + " - " + getMessage();
+        return String.format("%-9s %s - %s", "["+getType()+"]", getDateTime(), getMessage());
     }
 
     public static String getTimeStamp() {

@@ -128,7 +128,7 @@ public class EditorView implements ThemedComponent{
 
     public void updateFontMetrics() {
         // Calculate the height of a line accounting for line space
-        FontMetrics metrics = DocumentUtils.getFontMetricsForStyledDocument(textEditor.getStyledDocument(), textEditor);
+        FontMetrics metrics = DocumentUtils.getFontMetricsForStyledDocument(textEditor);
         lineSpace = StyleConstants.getSpaceBelow(attrs);
         int fontHeight = metrics.getHeight();
 

@@ -32,7 +32,8 @@ public class ThemeManager {
         for(String theme : resourceThemes) {
             try (InputStream is = ThemeManager.class.getResourceAsStream("/DefaultTheme/" + theme)) {
                 if (is == null) {
-                    throw new RuntimeException("Theme file not found: {"+ theme +"}.");
+                    Launcher.log(LogType.ERROR, "Theme file not found {"+theme+"}.");
+                    throw new RuntimeException("Theme file not found {"+ theme +"}.");
                 }
 
                 String json = new String(is.readAllBytes());
@@ -43,7 +44,7 @@ public class ThemeManager {
                 availableThemes.put(material.name, material);
             }
             catch (IOException  e) {
-                Launcher.log(LogType.ERROR, "Failed to load default themes {"+e.getMessage()+"}.");
+                Launcher.log(LogType.ERROR, "Error loading default theme {"+theme+"}.", e);
                 throw new RuntimeException(e);
             }
         }
@@ -76,11 +77,11 @@ public class ThemeManager {
                 Launcher.log(LogType.SUCCESS, "Loaded theme file {"+ theme.getName() +"}.");
             }
             catch (IOException e) {
-                Launcher.log(LogType.ERROR, "Failed to load theme file {"+ theme.getName() + "}: " + e.getMessage() +".");
+                Launcher.log(LogType.ERROR, "Error loading theme file {"+ theme.getName() + "}.", e);
             }
             catch (JsonSyntaxException e) {
                 // Don't terminate program, just ignore the theme file
-                Launcher.log(LogType.ERROR, "JSON Syntax error {"+ theme.getName() + "}: " + e.getMessage() +".");
+                Launcher.log(LogType.ERROR, "JSON Syntax error {"+ theme.getName() + "}.", e);
             }
         }
     }
@@ -101,6 +102,7 @@ public class ThemeManager {
             UIManager.setLookAndFeel(currentTheme.isLightTheme ?
                     new FlatMacLightLaf() : new FlatMacDarkLaf());
         } catch (UnsupportedLookAndFeelException e) {
+            Launcher.log(LogType.ERROR, "Unsupported Look and Feel.", e);
             throw new RuntimeException(e);
         }
 

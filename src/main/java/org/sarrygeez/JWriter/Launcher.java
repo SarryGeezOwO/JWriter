@@ -40,7 +40,7 @@ public class Launcher {
         // Handle Application crash e.g., Unhandled exception somewhere from the code
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
             System.err.println("Unhandled exception: " + throwable.getMessage());
-            Launcher.log(LogType.FATAL, "Application crashed {" + throwable.getMessage() + "}.");
+            Launcher.log(LogType.FATAL, "Application crashed.", throwable);
             Launcher.getLogger().dumpToDisk();
             System.exit(69); // 69 means a undefined fatal error for now idk...
         });
@@ -65,15 +65,20 @@ public class Launcher {
         logger.log(LogType.INFO, "Program process started.");
     }
 
-    public static Logger getLogger() {
+    public synchronized static Logger getLogger() {
         return logger;
     }
 
-    public static void log(LogType type, String msg) {
+    public synchronized static void log(LogType type, String msg) {
         logger.log(type, msg);
     }
 
+    public static void log(LogType type, String msg, Throwable err) {
+        logger.log(type, msg, err);
+    }
+
     public static void main(String[] args) {
+        long start = System.currentTimeMillis();
         setupFlatLaF();
 
         // Don't open the app, instead show an error window
@@ -83,20 +88,23 @@ public class Launcher {
             return;
         }
 
-/*
-    NOTE: Optional launcher configurations
-        "-dl" < Disable logging(for idk, small fixes ig?)
-        "-t"  < Select a theme on startup (overriding the saved settings)
-*/
+        String dir = args[0];
+        setupLogger(dir);
+        /*
+        Optional launcher configurations
+            "-dl" < Disable logging(for idk, small fixes ig?)
+            "-t"  < Select a theme on startup (overriding the saved settings)
+        */
         if(args.length > 1) { // Additional argument options
-            for(int i = 2; i < args.length; i++) {
+            for(int i = 1; i < args.length; i++) {
                 handleAdditionalArg(args[i]);
             }
         }
-
-        String dir = args[0];
-        setupLogger(dir);
         new Launcher(dir);
+
+        long end = System.currentTimeMillis();
+        long elapsedTime = end - start;
+        log(LogType.INFO, "Application configuration took: "+ elapsedTime + "ms");
     }
 
     private static void handleAdditionalArg(String arg) {
@@ -105,9 +113,11 @@ public class Launcher {
                 getLogger().setWriteToDisc(false);
                 break;
             case "-t":
+            case "-theme":
                 System.out.print("Theme Name\n> ");
                 Scanner scanner = new Scanner(System.in);
                 initTheme = scanner.nextLine();
+                log(LogType.DEBUG, "Override initial theme: " + initTheme);
                 break;
             default:
                 System.err.println("Unknown argument: {"+ arg + "}.");

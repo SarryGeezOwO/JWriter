@@ -1,5 +1,8 @@
 package org.sarrygeez.JWriter.Core.Utils;
 
+import org.sarrygeez.JWriter.Core.Utils.Logger.LogType;
+import org.sarrygeez.JWriter.Launcher;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
@@ -14,14 +17,18 @@ public class ImageLoader {
             InputStream stream = ImageLoader.class.getResourceAsStream(
                     "/Icons/"+image+"-"+ ((isLight) ? "Light":"Dark") + ".png");
 
-            if (stream == null)
-                throw new RuntimeException("Icon not found");
+            if (stream == null) {
+                Launcher.log(LogType.ERROR, "Icon not found.");
+                throw new RuntimeException("Icon not found.");
+            }
 
             icn = new ImageIcon(stream.readAllBytes());
             stream.close();
         }
         catch (IOException e) {
-            throw new RuntimeException(e);
+            // Prepare a dummy image or a fallback image if the image failed to load
+            Launcher.log(LogType.ERROR, "Something wrong happened to loadingImage.", e);
+            throw new RuntimeException(e); // Remove this when fallback image is ready
         }
         return icn;
     }

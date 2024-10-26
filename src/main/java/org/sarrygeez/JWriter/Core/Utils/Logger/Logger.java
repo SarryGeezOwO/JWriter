@@ -34,14 +34,19 @@ public class Logger {
         logEntries.add(l);
     }
 
+    public void log(LogType type, String msg, Throwable e) {
+        Log l = new Log(msg + " >> " + e.getMessage(), type);
+        logEntries.add(l);
+    }
+
     public void dumpToDisk() {
-        if(isWriteToDisc()) {
+        if(!isWriteToDisc()) {
             System.out.println("Logging disabled");
             return;
         }
 
         String currentDate = LocalDate.now().format(formatter);
-        File logFile = new File(baseLogDir + "/log["+currentDate+"].txt");
+        File logFile = new File(baseLogDir + "/log["+currentDate+"].log");
 
         try {
             // FileWriter will create the log file, if it doesn't exist yet

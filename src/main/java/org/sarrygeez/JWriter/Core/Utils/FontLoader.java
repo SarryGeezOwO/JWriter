@@ -40,12 +40,12 @@ public class FontLoader {
                 fontMap.put(appFont.getFamily(), appFont);
             }
             catch (IOException e) {
-                Launcher.log(LogType.ERROR, "FontStream incomplete read: "+e.getMessage()+".");
+                Launcher.log(LogType.ERROR, "FontStream incomplete read.", e);
                 throw new RuntimeException(e);
             }
             catch (FontFormatException e) {
                 // Prepare a fallback font for UIs using an AppFont(resource Font)
-                Launcher.log(LogType.ERROR, "Font not loaded properly {"+font+"}: "+e.getMessage()+".");
+                Launcher.log(LogType.ERROR, "Font not loaded properly {"+font+"}.", e);
                 throw new RuntimeException(e);
             }
         }
@@ -70,10 +70,10 @@ public class FontLoader {
             }
             // If a catch happens, ignore the font from being available
             catch (IOException e) {
-                Launcher.log(LogType.ERROR, "FontStream incomplete read: "+e.getMessage()+".");
+                Launcher.log(LogType.ERROR, "FontStream incomplete read.", e);
             }
             catch (FontFormatException e) {
-                Launcher.log(LogType.ERROR, "Font not loaded properly {"+font.getName()+"}: "+e.getMessage()+".");
+                Launcher.log(LogType.ERROR, "Font not loaded properly {"+font.getName()+"}.", e);
             }
         }
     }
