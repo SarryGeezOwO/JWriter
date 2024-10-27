@@ -1,6 +1,7 @@
 package org.sarrygeez.JWriter.Controller;
 
 import org.sarrygeez.JWriter.View.TextFormatterView;
+import org.sarrygeez.JWriter.Widget.ColorPickerListener;
 
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -21,6 +22,10 @@ public class TextFormatterController {
 
     public EditorController getEditorController() {
         return editorController;
+    }
+
+    public void addColorPickerListener(ColorPickerListener listener) {
+        view.GetHighlightColorChooser().addListener(listener);
     }
 
     public void setStyle(Styles style) {

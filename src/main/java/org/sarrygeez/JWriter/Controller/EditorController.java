@@ -66,9 +66,12 @@ public class EditorController {
 
         // Highlighter setup
         this.highlighter = new DocumentHighlighter(textEditor);
+        formatterController.addColorPickerListener(color -> {
+            highlighter.setHighlightColor(color);
+            highlighter.triggerCheck();
+        });
 
         // More setup.... 🔥🔥🔥`
-        app.getThemeManager().registerComponent(this.highlighter);
         app.getThemeManager().registerComponent(this.formatterController.getView());
         app.getThemeManager().registerComponent(this.lineCount);
         setupKeyBinds();

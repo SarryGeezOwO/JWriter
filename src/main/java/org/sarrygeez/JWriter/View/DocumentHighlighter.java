@@ -15,15 +15,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DocumentHighlighter implements ThemedComponent{
+public class DocumentHighlighter{
 
     private final JTextPane textPane;
     private final HashMap<Integer, Integer> locatorMap = new HashMap<>();
-    private Color highlightCol;
+    private Color highlightCol = Color.GRAY;
 
-    @Override
-    public void applyTheme(Theme theme) {
-        highlightCol = Color.decode(theme.getEditor("highlight"));
+    public void setHighlightColor(Color color) {
+        highlightCol = color;
     }
 
     public DocumentHighlighter(JTextPane textPane) {
@@ -46,7 +45,7 @@ public class DocumentHighlighter implements ThemedComponent{
         });
     }
 
-    private void triggerCheck() {
+    public void triggerCheck() {
         checkForBackticks();
         textPane.repaint();
     }

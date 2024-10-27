@@ -4,6 +4,7 @@ import net.miginfocom.swing.MigLayout;
 import org.sarrygeez.JWriter.Controller.TextFormatterController;
 import org.sarrygeez.JWriter.Core.Theme;
 import org.sarrygeez.JWriter.Core.Utils.ComponentDecorator;
+import org.sarrygeez.JWriter.Widget.ColorChooser;
 import org.sarrygeez.JWriter.Widget.ImageButton;
 
 import javax.swing.*;
@@ -24,6 +25,7 @@ public class TextFormatterView extends JPanel implements ThemedComponent{
     private final ImageButton strikeButton = new ImageButton("strike", 22);
     private final boolean[] isButtonActive = {false, false, false, false}; // Yes, this shit is primitive af
 
+    private final ColorChooser highlightColorChooser = new ColorChooser("Text Highlight Color");
     private final ImageButton helpButton = new ImageButton("question", 20);
 
     private Color defaultCol;
@@ -55,6 +57,8 @@ public class TextFormatterView extends JPanel implements ThemedComponent{
         insertToggleButton(italicButton,    1, 'i');
         insertToggleButton(underlineButton, 2, 'u');
         insertToggleButton(strikeButton,    3, 's');
+        insertSeparator();
+        main.add(highlightColorChooser, "grow, width 20:20:20, height 20:20:20");
         insertSeparator();
         insertButton(helpButton, 'h', null);
 
@@ -93,6 +97,10 @@ public class TextFormatterView extends JPanel implements ThemedComponent{
             }
             btn.setBackground(activeCol);
         });
+    }
+
+    public ColorChooser GetHighlightColorChooser() {
+        return highlightColorChooser;
     }
 
     private void insertSeparator() {
