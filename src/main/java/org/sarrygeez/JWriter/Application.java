@@ -14,10 +14,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Application implements ThemedComponent {
 
     private static final JFrame frame = new JFrame();
+    private static final List<AppListener> listeners = new ArrayList<>();
     private final Dimension startSize = new Dimension(920, 720);
     private final ThemeManager themeManager;
     private final String initialTheme;
@@ -27,12 +30,18 @@ public class Application implements ThemedComponent {
             @Override
             public void windowOpened(WindowEvent e) {
                 Launcher.log(LogType.INFO, "Application frame opened.");
+                for (AppListener listener : listeners) {
+                    listener.onStart();
+                }
             }
 
             @Override
             public void windowClosed(WindowEvent e) {
                 Launcher.log(LogType.INFO, "Application frame closed.");
                 Launcher.getLogger().dumpToDisk();
+                for (AppListener listener : listeners) {
+                    listener.onClose();
+                }
             }
         });
 
@@ -49,6 +58,10 @@ public class Application implements ThemedComponent {
 
     public static void CloseAPP() {
         frame.dispose();
+    }
+
+    public static void addListener(AppListener listener) {
+        listeners.add(listener);
     }
 
     private void initFrame() {
