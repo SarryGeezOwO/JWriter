@@ -48,7 +48,19 @@ public class RemoveText extends DocumentAction{
 
     @Override
     public String toString() {
-        return "Remove Text";
+        return String.format("Remove Text: [offset(%d) : len(%d)]", offset, text.length());
+    }
+
+    public AttributeSet getAttrs() {
+        return attrs;
+    }
+
+    public Document getEditor() {
+        return editor;
+    }
+
+    public CustomDocumentFilter getFilter() {
+        return filter;
     }
 
     @SuppressWarnings("unused")

@@ -1,11 +1,11 @@
 package org.sarrygeez.JWriter.Controller;
 
 import net.miginfocom.swing.MigLayout;
+import org.sarrygeez.JWriter.AppListener;
 import org.sarrygeez.JWriter.Application;
 import org.sarrygeez.JWriter.Core.Command;
 import org.sarrygeez.JWriter.Core.Commands.Redo;
 import org.sarrygeez.JWriter.Core.Commands.Undo;
-import org.sarrygeez.JWriter.Core.Commands.document.DocumentAction;
 import org.sarrygeez.JWriter.Core.Editor.CustomDocumentFilter;
 import org.sarrygeez.JWriter.Core.Editor.DocumentHistory;
 import org.sarrygeez.JWriter.Core.Editor.HistoryListener;
@@ -23,7 +23,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class EditorController {
@@ -39,6 +38,7 @@ public class EditorController {
     private final HashMap<String, Command> commandMap = new HashMap<>();
     private final DocumentHighlighter highlighter;
 
+    @SuppressWarnings("unused")
     public void addHistoryListener(HistoryListener listener) {
         history.addHistoryListener(listener);
     }
@@ -47,6 +47,13 @@ public class EditorController {
         this.app = app;
 
         history = new DocumentHistory();
+        Application.addListener(new AppListener() {
+            @Override
+            public void onClose() {
+                history.getTimer().cancel(); // Close timer
+            }
+        });
+
         CustomDocumentFilter documentFilter = new CustomDocumentFilter(history, this);
         this.formatterController = new TextFormatterController(this);
 
@@ -73,6 +80,7 @@ public class EditorController {
         getTextEditor().requestFocus();
     }
 
+    @SuppressWarnings("unused")
     public DocumentHistory getHistory() {
         return history;
     }

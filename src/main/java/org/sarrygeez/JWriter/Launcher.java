@@ -40,6 +40,10 @@ public class Launcher {
         // Handle Application crash e.g., Unhandled exception somewhere from the code
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
             System.err.println("Unhandled exception: " + throwable.getMessage());
+            for(int i = 0; i < 6; i++) {
+                StackTraceElement trace = throwable.getStackTrace()[i];
+                System.err.println(trace);
+            }
             Launcher.log(LogType.FATAL, "Application crashed.", throwable);
             Launcher.getLogger().dumpToDisk();
             System.exit(69); // 69 means a undefined fatal error for now idk...

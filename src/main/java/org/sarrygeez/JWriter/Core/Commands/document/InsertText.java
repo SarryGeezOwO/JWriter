@@ -51,6 +51,18 @@ public class InsertText extends DocumentAction {
         return "Insert Text: \"" + text + "\"";
     }
 
+    public Document getEditor() {
+        return editor;
+    }
+
+    public CustomDocumentFilter getFilter() {
+        return filter;
+    }
+
+    public AttributeSet getAttrs() {
+        return attrs;
+    }
+
     @SuppressWarnings("unused")
     public String getText() {
         return text;
