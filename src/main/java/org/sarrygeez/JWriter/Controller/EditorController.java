@@ -12,6 +12,7 @@ import org.sarrygeez.JWriter.Core.Editor.HistoryListener;
 import org.sarrygeez.JWriter.View.DocumentHighlighter;
 import org.sarrygeez.JWriter.View.EditorView;
 import org.sarrygeez.JWriter.View.StatusBarView;
+import org.sarrygeez.JWriter.Widget.LineCountWidget;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -33,7 +34,7 @@ public class EditorController {
     private final Application app;
     private final DocumentHistory history;
 
-    private final JComponent lineCount;
+    private final LineCountWidget lineCount;
     private final JTextPane textEditor;
     private final HashMap<String, Command> commandMap = new HashMap<>();
     private final DocumentHighlighter highlighter;
@@ -69,6 +70,7 @@ public class EditorController {
         // More setup.... 🔥🔥🔥`
         app.getThemeManager().registerComponent(this.highlighter);
         app.getThemeManager().registerComponent(this.formatterController.getView());
+        app.getThemeManager().registerComponent(this.lineCount);
         setupKeyBinds();
 
         // Initiate CommandMap
@@ -123,12 +125,13 @@ public class EditorController {
     public JPanel display() {
         JPanel root = new JPanel(new BorderLayout());
         root.setOpaque(false);
-        JPanel p = new JPanel(new MigLayout("fill, insets 0, gap 0"));
 
-        p.add(lineCount, "west, span, grow");
-        p.add(textEditor, "center, span, grow");
-
+        JPanel p = new JPanel(new MigLayout("fill, inset 0, gap 0"));
         JScrollPane scroll = new JScrollPane(p);
+
+        p.add(lineCount, "west, grow, span");
+        p.add(textEditor, "center, grow, span");
+
         scroll.setBorder(new EmptyBorder(0, 0, 0, 0));
         scroll.getHorizontalScrollBar().setUnitIncrement(15);
         scroll.getVerticalScrollBar().setUnitIncrement(15);

@@ -5,8 +5,8 @@ import org.sarrygeez.JWriter.Core.Editor.CustomDocumentFilter;
 import org.sarrygeez.JWriter.Core.Editor.EditorContext;
 import org.sarrygeez.JWriter.Core.Theme;
 import org.sarrygeez.JWriter.Core.Utils.ComponentDecorator;
-import org.sarrygeez.JWriter.Core.Utils.DocumentUtils;
 import org.sarrygeez.JWriter.Core.Utils.FontLoader;
+import org.sarrygeez.JWriter.Widget.LineCountWidget;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -18,17 +18,15 @@ public class EditorView implements ThemedComponent{
 
     private final EditorController controller;
     private final JTextPane textEditor;
-    private final JPanel lineCount;
+    private final LineCountWidget lineCount;
     private int lineNumber;
 
-    private SimpleAttributeSet attrs;
-    private Color lineCountForeground;
-    private Color lineHighlightColor;
-    private Color lineHighlightForeground;
-    private Color editorBackgroundCol;
+    public Color lineCountForeground;
+    public Color lineHighlightColor;
+    public Color lineHighlightForeground;
 
-    private float lineSpace;
-    private int lineHeight;
+    private SimpleAttributeSet attrs;
+    private Color editorBackgroundCol;
 /*
         TODO: Setup the caret
               work on the shit from trello
@@ -38,12 +36,11 @@ public class EditorView implements ThemedComponent{
     public void applyTheme(Theme theme) {
         editorBackgroundCol = (Color.decode(theme.getEditor("background")));
         textEditor.setForeground(Color.decode(theme.getEditor("foreground")));
-        lineCount.setBackground(Color.decode(theme.getEditor("lineCountBackground")));
+        ComponentDecorator.addPaddedBorder(new EmptyBorder(5,5,0,5), new Insets(0,1,0,0), textEditor, theme);
 
         lineCountForeground = Color.decode(theme.getEditor("lineCountForeground"));
         lineHighlightColor = Color.decode(theme.getEditor("lineHighlightBackground"));
         lineHighlightForeground = Color.decode(theme.getEditor("lineHighlightForeground"));
-        ComponentDecorator.addPaddedBorder(new EmptyBorder(5,5,0,5), new Insets(0,1,0,0), textEditor, theme);
     }
 
     public EditorView(EditorController controller, CustomDocumentFilter documentFilter) {
@@ -53,6 +50,7 @@ public class EditorView implements ThemedComponent{
         textEditor = new JTextPane() {
             @Override
             protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D)g.create();
 
                 // Paint the background first
@@ -60,6 +58,7 @@ public class EditorView implements ThemedComponent{
                 g2d.fillRect(0, 0, getWidth(), getHeight());
 
                 // Not sure, to draw line highlight
+                // Might be better with double buffering, not sure yet tho
                 //drawLineHighlight(g2d, this); // Line Highlight
 
                 // Only paint the highlight after the BG but before the text
@@ -77,15 +76,8 @@ public class EditorView implements ThemedComponent{
         //textEditor.setCaret(new CustomCaret());
 
         // Line Count Component
-        lineCount = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                drawLineCount(g);
-            }
-        };
-
-        updateFontMetrics();
+        lineCount = new LineCountWidget(this);
+        lineCount.updateFontMetrics();
     }
 
     private void initEditorStyle() {
@@ -121,42 +113,7 @@ public class EditorView implements ThemedComponent{
         return textEditor;
     }
 
-    public JPanel displayLineCount() {
-        lineCount.setPreferredSize(new Dimension(50, 0));
-        return lineCount;
-    }
-
-    public void updateFontMetrics() {
-        // Calculate the height of a line accounting for line space
-        FontMetrics metrics = DocumentUtils.getFontMetricsForStyledDocument(textEditor);
-        lineSpace = StyleConstants.getSpaceBelow(attrs);
-        int fontHeight = metrics.getHeight();
-
-        lineHeight = (int)(fontHeight + (lineSpace));
-    }
-
-    private void drawLineCount(Graphics g) {
-        int startOffset = textEditor.viewToModel2D(new Point(0, 0));
-        int startLine = textEditor.getDocument().getDefaultRootElement().getElementIndex(startOffset);
-        int y = 0;
-
-        Graphics2D g2d = (Graphics2D) g.create();
-        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2d.setFont(new Font(FontLoader.appFontsFamily.get(1), Font.PLAIN, 13));
-
-        drawLineHighlight(g2d, lineCount);
-
-        // Draw number lines after the highlight, so it doesn't get affected by the highlight color
-        for(int i = startLine; y < DocumentUtils.getTotalLineCount(textEditor) * lineHeight; i++) {
-            String lineN = String.format("%4s", i + 1);
-            y += lineHeight;
-
-            g2d.setColor(i == lineNumber ? lineHighlightForeground : lineCountForeground);
-            g2d.drawString(lineN, 10, y - lineSpace);
-        }
-    }
-
-    private void drawLineHighlight(Graphics g, JComponent source) {
+    public void drawLineHighlight(Graphics g, JComponent source) {
         g.setColor(lineHighlightColor);
         try {
             int startOffset = textEditor.getDocument().getDefaultRootElement()
@@ -173,6 +130,15 @@ public class EditorView implements ThemedComponent{
         } catch (BadLocationException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public LineCountWidget displayLineCount() {
+        lineCount.setPreferredSize(new Dimension(50, 0));
+        return lineCount;
+    }
+
+    public JTextPane getTextEditor() {
+        return textEditor;
     }
 
     public int getLineNumber() {
