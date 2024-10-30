@@ -1,6 +1,6 @@
 package org.sarrygeez.JWriter.View;
 
-import org.sarrygeez.JWriter.Core.Theme;
+import org.sarrygeez.JWriter.Controller.TextFormatterController;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -10,24 +10,30 @@ import javax.swing.text.Document;
 import javax.swing.text.StyleConstants;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
-public class DocumentHighlighter{
+public class DocumentHighlighter {
 
     private final JTextPane textPane;
-    private final HashMap<Integer, Integer> locatorMap = new HashMap<>();
+
+    // Start and End offset of the highlighted text
+    private final LinkedHashMap<Integer, Integer> locatorMap = new LinkedHashMap<>();
+    private final TextFormatterController textFormatter;
     private Color highlightCol = Color.GRAY;
 
     public void setHighlightColor(Color color) {
         highlightCol = color;
     }
 
-    public DocumentHighlighter(JTextPane textPane) {
+    public DocumentHighlighter(JTextPane textPane, TextFormatterController textFormatter) {
         this.textPane = textPane;
+        this.textFormatter = textFormatter;
         addDocumentListener();
+    }
+
+    public LinkedHashMap<Integer, Integer> getLocatorMap() {
+        return locatorMap;
     }
 
     private void addDocumentListener() {
@@ -48,6 +54,7 @@ public class DocumentHighlighter{
     public void triggerCheck() {
         checkForBackticks();
         textPane.repaint();
+        textFormatter.refreshHighlightOverview();
     }
 
     private void checkForBackticks() {
@@ -59,7 +66,7 @@ public class DocumentHighlighter{
             return;
         }
 
-        HashMap<Integer, Integer> newMap = new HashMap<>();
+        LinkedHashMap<Integer, Integer> newMap = new LinkedHashMap<>();
 
         for(int i = 0; i < backtickOffsets.size(); i += 2) {
             int start = backtickOffsets.get(i);

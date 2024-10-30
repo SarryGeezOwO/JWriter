@@ -66,7 +66,7 @@ public class EditorController {
         textEditor = view.displayTextEditor();
 
         // Highlighter setup
-        this.highlighter = new DocumentHighlighter(textEditor);
+        this.highlighter = new DocumentHighlighter(textEditor, formatterController);
         formatterController.addColorPickerListener(color -> {
             highlighter.setHighlightColor(color);
             highlighter.triggerCheck();
@@ -84,6 +84,10 @@ public class EditorController {
 
     public void requestFocus() {
         getTextEditor().requestFocus();
+    }
+
+    public TextFormatterController getFormatterController() {
+        return formatterController;
     }
 
     @SuppressWarnings("unused")

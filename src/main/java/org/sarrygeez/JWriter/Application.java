@@ -113,6 +113,9 @@ public class Application implements ThemedComponent {
             themeManager.registerComponent(titleBarMenuController.getView());
             frame.setJMenuBar(titleBarMenuController.getView());
 
+            overviewView.addExtendableWidgetListener(() ->
+                    editorController.getFormatterController().refreshHighlightOverview());
+
             setLayout(new BorderLayout());
             add(sidebar, BorderLayout.WEST);
             add(overviewView, BorderLayout.EAST);

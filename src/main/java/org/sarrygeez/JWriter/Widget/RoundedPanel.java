@@ -20,6 +20,16 @@ public class RoundedPanel extends JPanel{
     }
 
     @SuppressWarnings("unused")
+    public RoundedPanel(int radius) {
+        this.topLeft = radius;
+        this.topRight = radius;
+        this.bottomRight = radius;
+        this.bottomLeft = radius;
+        setOpaque(false);
+        setBorder(null);
+    }
+
+    @SuppressWarnings("unused")
     public RoundedPanel(int topLeft, int topRight, int bottomRight, int bottomLeft) {
         this.topLeft = topLeft;
         this.topRight = topRight;

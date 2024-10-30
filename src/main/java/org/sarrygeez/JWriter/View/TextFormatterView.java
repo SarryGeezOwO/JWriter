@@ -9,7 +9,6 @@ import org.sarrygeez.JWriter.Widget.ImageButton;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 import static org.sarrygeez.JWriter.Controller.TextFormatterController.Styles.*;
 
@@ -61,8 +60,8 @@ public class TextFormatterView extends JPanel implements ThemedComponent{
         insertSeparator();
         main.add(highlightColorChooser, "grow, width 20:20:20, height 20:20:20");
         insertSeparator();
-        insertButton(overviewButton, 'o', null);
-        insertButton(helpButton, 'h', null);
+        insertButton(overviewButton, 'o');
+        insertButton(helpButton, 'h');
 
         add(dummy, BorderLayout.WEST);
         add(main, BorderLayout.CENTER);
@@ -74,14 +73,14 @@ public class TextFormatterView extends JPanel implements ThemedComponent{
         underlineButton.addActionListener(e -> controller.setStyle(UNDERLINE));
         strikeButton.addActionListener(e    -> controller.setStyle(STRIKE));
         overviewButton.addActionListener(e  -> controller.toggleOverviewView());
+        helpButton.addActionListener(e      -> System.out.println("Hello world..."));
     }
 
-    private void insertButton(ImageButton btn, char mm, ActionListener al) {
+    private void insertButton(ImageButton btn, char mm) {
         main.add(btn, "grow");
         controller.getEditorController().getApp().getThemeManager().registerComponent(btn);
         btn.setMnemonic(mm);
-        if(al != null)
-            btn.addActionListener(al);
+        btn.addActionListener(e -> controller.getEditorController().requestFocus());
     }
 
     private void insertToggleButton(ImageButton btn, int index, char mm) {

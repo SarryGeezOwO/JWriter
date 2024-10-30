@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.sarrygeez.JWriter.Widget.WidgetEnum.*;
 
@@ -16,14 +18,22 @@ public class ExtendablePanel extends JPanel implements ThemedComponent {
     private final Direction direction;
     private final int min, max;
     private JPanel contentPane;
+    private final List<ExtendableWidgetListener> listeners = new ArrayList<>();
 
     @Override
     public void applyTheme(Theme theme) {
         /* Override this to other class whatever you want */
 
         // By default, it has a styling
-        setBackground(Color.decode(theme.getColor("primary")));
-        dragPane.setBackground(Color.decode(theme.getColor("primary")));
+        Color primary = Color.decode(theme.getColor("primary"));
+        contentPane.setBackground(primary);
+        dragPane.setBackground(primary);
+        setBackground(primary);
+    }
+
+    @SuppressWarnings("unused")
+    public void addExtendableWidgetListener(ExtendableWidgetListener listener) {
+        listeners.add(listener);
     }
 
     @SuppressWarnings("unused")
@@ -47,7 +57,6 @@ public class ExtendablePanel extends JPanel implements ThemedComponent {
 
         setDoubleBuffered(true);
         dragPane.setPreferredSize(new Dimension(4, 4));
-        dragPane.setBackground(Color.YELLOW);
 
         initMouseEvents();
         setLayout(new BorderLayout());
@@ -89,6 +98,9 @@ public class ExtendablePanel extends JPanel implements ThemedComponent {
                         :
                         calculateNewWidth(pane, min, max, (direction == Direction.LEFT))
                         );
+                if(newValue == max || newValue == min) {
+                    return;
+                }
 
                 // Modify Panels property { Scale: Width }
                 setPreferredSize((direction == Direction.TOP || direction == Direction.BOTTOM) ?
@@ -96,8 +108,11 @@ public class ExtendablePanel extends JPanel implements ThemedComponent {
                     :
                         new Dimension(newValue, getHeight())
                 );
-                repaint();
                 revalidate();
+
+                for(ExtendableWidgetListener listener : listeners) {
+                    listener.onResized();
+                }
             }
         });
     }

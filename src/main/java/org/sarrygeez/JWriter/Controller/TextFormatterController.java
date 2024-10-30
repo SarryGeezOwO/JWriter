@@ -27,6 +27,13 @@ public class TextFormatterController {
         this.view = new TextFormatterView(this);
     }
 
+    public void refreshHighlightOverview() {
+        overviewView.refreshListAsync(
+                editorController.getHighlighter().getLocatorMap(),
+                editorController.getTextEditor().getDocument()
+        );
+    }
+
     public EditorController getEditorController() {
         return editorController;
     }
