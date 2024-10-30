@@ -1,5 +1,7 @@
 package org.sarrygeez.JWriter.Controller;
 
+import org.sarrygeez.JWriter.Application;
+import org.sarrygeez.JWriter.View.NoteOverviewView;
 import org.sarrygeez.JWriter.View.TextFormatterView;
 import org.sarrygeez.JWriter.Widget.ColorPickerListener;
 
@@ -9,19 +11,29 @@ import javax.swing.text.StyleConstants;
 public class TextFormatterController {
 
     private final TextFormatterView view;
+    private final NoteOverviewView overviewView;
     private final EditorController editorController;
+    private boolean isOverviewVisible = false;
 
     public enum Styles {
         BOLD, ITALIC, UNDERLINE, STRIKE
     }
 
-    public TextFormatterController(EditorController editorController) {
+    public TextFormatterController(EditorController editorController, NoteOverviewView overviewView, Application app) {
+        this.overviewView = overviewView;
+        app.getThemeManager().registerComponent(this.overviewView);
+
         this.editorController = editorController;
         this.view = new TextFormatterView(this);
     }
 
     public EditorController getEditorController() {
         return editorController;
+    }
+
+    public void toggleOverviewView() {
+        isOverviewVisible = !isOverviewVisible;
+        overviewView.setVisible(isOverviewVisible);
     }
 
     public void addColorPickerListener(ColorPickerListener listener) {

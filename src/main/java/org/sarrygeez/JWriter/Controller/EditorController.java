@@ -11,6 +11,7 @@ import org.sarrygeez.JWriter.Core.Editor.DocumentHistory;
 import org.sarrygeez.JWriter.Core.Editor.HistoryListener;
 import org.sarrygeez.JWriter.View.DocumentHighlighter;
 import org.sarrygeez.JWriter.View.EditorView;
+import org.sarrygeez.JWriter.View.NoteOverviewView;
 import org.sarrygeez.JWriter.View.StatusBarView;
 import org.sarrygeez.JWriter.Widget.LineCountWidget;
 
@@ -44,7 +45,7 @@ public class EditorController {
         history.addHistoryListener(listener);
     }
 
-    public EditorController(Application app) {
+    public EditorController(Application app, NoteOverviewView overviewView) {
         this.app = app;
 
         history = new DocumentHistory();
@@ -56,7 +57,7 @@ public class EditorController {
         });
 
         CustomDocumentFilter documentFilter = new CustomDocumentFilter(history, this);
-        this.formatterController = new TextFormatterController(this);
+        this.formatterController = new TextFormatterController(this, overviewView, app);
 
         // Setup UI components
         // EditorView is the combination of the LineCount and the actual textEditor
@@ -141,6 +142,7 @@ public class EditorController {
 
         root.add(formatterController.getView(), BorderLayout.NORTH);
         root.add(scroll, BorderLayout.CENTER);
+        root.setDoubleBuffered(true);
         return root;
     }
 

@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ImageLoader {
-    private ImageLoader(){}
 
     public static ImageIcon loadImage(String image, boolean isLight) {
         ImageIcon icn;
@@ -27,7 +26,11 @@ public class ImageLoader {
         }
         catch (IOException e) {
             // Prepare a dummy image or a fallback image if the image failed to load
-            Launcher.log(LogType.ERROR, "Something wrong happened to loadingImage.", e);
+            Launcher.log(LogType.ERROR,
+                    "Error: loadingImage " +
+                            (isLight ? "Light" : "Dark") +
+                            " {"+image+"}.",
+                    e);
             throw new RuntimeException(e); // Remove this when fallback image is ready
         }
         return icn;

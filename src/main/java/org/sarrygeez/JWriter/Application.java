@@ -6,6 +6,7 @@ import org.sarrygeez.JWriter.Controller.TitleBarMenuController;
 import org.sarrygeez.JWriter.Core.Theme;
 import org.sarrygeez.JWriter.Core.ThemeManager;
 import org.sarrygeez.JWriter.Core.Utils.Logger.LogType;
+import org.sarrygeez.JWriter.View.NoteOverviewView;
 import org.sarrygeez.JWriter.View.SidebarView;
 import org.sarrygeez.JWriter.View.StatusBarView;
 import org.sarrygeez.JWriter.View.ThemedComponent;
@@ -93,8 +94,9 @@ public class Application implements ThemedComponent {
 
         ContentPane(Application app) {
             SidebarView sidebar = new SidebarView();
+            NoteOverviewView overviewView = new NoteOverviewView();
 
-            EditorController editorController = new EditorController(app);
+            EditorController editorController = new EditorController(app, overviewView);
             HeaderController headerController = new HeaderController(app, editorController);
             TitleBarMenuController titleBarMenuController = new TitleBarMenuController(editorController);
             StatusBarView statusBar = new StatusBarView(editorController, headerController);
@@ -113,6 +115,7 @@ public class Application implements ThemedComponent {
 
             setLayout(new BorderLayout());
             add(sidebar, BorderLayout.WEST);
+            add(overviewView, BorderLayout.EAST);
             add(statusBar, BorderLayout.SOUTH);
             add(headerController.getView(), BorderLayout.NORTH);
             add(editorController.display(), BorderLayout.CENTER);

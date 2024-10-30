@@ -27,6 +27,7 @@ public class TextFormatterView extends JPanel implements ThemedComponent{
 
     private final ColorChooser highlightColorChooser = new ColorChooser("Text Highlight Color");
     private final ImageButton helpButton = new ImageButton("question", 20);
+    private final ImageButton overviewButton = new ImageButton("Overview", 22);
 
     private Color defaultCol;
     private Color activeCol;
@@ -35,7 +36,7 @@ public class TextFormatterView extends JPanel implements ThemedComponent{
     public void applyTheme(Theme theme) {
         main.setBackground(Color.decode(theme.getColor("primary")));
         dummy.setBackground(Color.decode(theme.getEditor("lineCountBackground")));
-        ComponentDecorator.addBorder(new Insets(1, 1, 1, 1), main, theme);
+        ComponentDecorator.addBorder(new Insets(1, 1, 1, 0), main, theme);
 
         defaultCol = Color.decode(theme.getColor("primary"));
         activeCol = Color.decode(theme.getColor("accent"));
@@ -60,6 +61,7 @@ public class TextFormatterView extends JPanel implements ThemedComponent{
         insertSeparator();
         main.add(highlightColorChooser, "grow, width 20:20:20, height 20:20:20");
         insertSeparator();
+        insertButton(overviewButton, 'o', null);
         insertButton(helpButton, 'h', null);
 
         add(dummy, BorderLayout.WEST);
@@ -71,6 +73,7 @@ public class TextFormatterView extends JPanel implements ThemedComponent{
         italicButton.addActionListener(e    -> controller.setStyle(ITALIC));
         underlineButton.addActionListener(e -> controller.setStyle(UNDERLINE));
         strikeButton.addActionListener(e    -> controller.setStyle(STRIKE));
+        overviewButton.addActionListener(e  -> controller.toggleOverviewView());
     }
 
     private void insertButton(ImageButton btn, char mm, ActionListener al) {

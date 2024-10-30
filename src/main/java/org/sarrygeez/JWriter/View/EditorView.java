@@ -59,7 +59,7 @@ public class EditorView implements ThemedComponent{
 
                 // Not sure, to draw line highlight
                 // Might be better with double buffering, not sure yet tho
-                //drawLineHighlight(g2d, this); // Line Highlight
+                drawLineHighlight(g2d, this); // Line Highlight
 
                 // Only paint the highlight after the BG but before the text
                 controller.getHighlighter().paintComponent(g2d);

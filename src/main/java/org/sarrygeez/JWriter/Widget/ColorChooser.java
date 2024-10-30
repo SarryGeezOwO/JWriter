@@ -85,7 +85,7 @@ public class ColorChooser extends RoundedPanel implements ThemedComponent {
 
                 styleColorChooser(popup);
                 popup.pack();
-                popup.show(invoker, getWidth()+5, 5);
+                popup.show(invoker, 0, getHeight() + 8);
             }
         });
     }
