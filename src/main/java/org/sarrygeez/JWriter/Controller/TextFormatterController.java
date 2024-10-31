@@ -13,6 +13,7 @@ public class TextFormatterController {
     private final TextFormatterView view;
     private final NoteOverviewView overviewView;
     private final EditorController editorController;
+    private final Application app;
     private boolean isOverviewVisible = false;
 
     public enum Styles {
@@ -21,10 +22,12 @@ public class TextFormatterController {
 
     public TextFormatterController(EditorController editorController, NoteOverviewView overviewView, Application app) {
         this.overviewView = overviewView;
-        app.getThemeManager().registerComponent(this.overviewView);
-
+        this.app = app;
         this.editorController = editorController;
         this.view = new TextFormatterView(this);
+
+        app.getThemeManager().registerComponent(this.overviewView);
+        app.getThemeManager().registerComponent(this.getView().GetHighlightColorChooser());
     }
 
     public void refreshHighlightOverview() {
@@ -32,6 +35,11 @@ public class TextFormatterController {
                 editorController.getHighlighter().getLocatorMap(),
                 editorController.getTextEditor().getDocument()
         );
+    }
+
+    @SuppressWarnings("unused")
+    public Application getApp() {
+        return app;
     }
 
     public EditorController getEditorController() {

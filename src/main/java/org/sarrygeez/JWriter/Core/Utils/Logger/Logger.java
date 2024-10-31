@@ -29,14 +29,14 @@ public class Logger {
         this.baseLogDir = baseLogDir;
     }
 
-    public void log(LogType type, String msg) {
-        Log l = new Log(msg, type);
-        logEntries.add(l);
+    public void log(LogType type, String msg, Throwable e) {
+        log(type, msg + " >> " + e.getMessage());
     }
 
-    public void log(LogType type, String msg, Throwable e) {
-        Log l = new Log(msg + " >> " + e.getMessage(), type);
-        logEntries.add(l);
+    public void log(LogType type, String msg) {
+        Log log = new Log(msg, type);
+        System.out.println(log);
+        logEntries.add(log);
     }
 
     public void dumpToDisk() {

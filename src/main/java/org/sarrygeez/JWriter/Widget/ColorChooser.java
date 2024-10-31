@@ -26,7 +26,8 @@ public class ColorChooser extends RoundedPanel implements ThemedComponent {
 
     @Override
     public void applyTheme(Theme theme) {
-
+        hexField.setBackground(Color.decode(theme.getColor("accent")));
+        chooser.setBackground(Color.decode(theme.getColor("primary")));
     }
 
     public void addListener(ColorPickerListener listener) {
@@ -71,30 +72,34 @@ public class ColorChooser extends RoundedPanel implements ThemedComponent {
             @Override
             public void mousePressed(MouseEvent e) {
                 JPopupMenu popup = new JPopupMenu();
-                popup.setLayout(new MigLayout("FillX, Insets 10, gap 10"));
+                popup.setPopupSize(315, 330);
+                popup.setLayout(new MigLayout("FillX, Insets 15, gap 5"));
 
                 // Remove all default color chooser panels
+                popup.setBackground(chooser.getBackground());
                 AbstractColorChooserPanel[] panels = chooser.getChooserPanels();
                 for (AbstractColorChooserPanel panel : panels) {
                     if(panel.getDisplayName().equals("HSV")) {
+                        panel.setBackground(chooser.getBackground());
                         removeComponents(panel);
                         continue;
                     }
                     chooser.removeChooserPanel(panel);
                 }
 
-                styleColorChooser(popup);
+                attachComponents(popup);
+                popup.revalidate();
                 popup.pack();
-                popup.show(invoker, 0, getHeight() + 8);
+                popup.show(invoker, 0, getHeight() + 10);
             }
         });
     }
 
-    private void styleColorChooser(Container root) {
+    private void attachComponents(Container root) {
         root.add(new JLabel(label), "span, grow, wrap");
-        root.add(chooser, "grow, span, wrap");
+        root.add(chooser, "grow, span, gapLeft 5, wrap");
         root.add(new JLabel("Hex:"), "grow");
-        root.add(hexField, "grow");
+        root.add(hexField, "grow, gapRight 5");
     }
 
     private void removeComponents(Container container) {
@@ -103,7 +108,8 @@ public class ColorChooser extends RoundedPanel implements ThemedComponent {
                 component instanceof JSlider ||
                 component instanceof JRadioButton ||
                 component instanceof JSpinner ||
-                component instanceof JLabel
+                component instanceof JLabel ||
+                component instanceof JFormattedTextField
                 )
             {
                 container.remove(component);
